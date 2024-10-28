@@ -11,7 +11,7 @@ from random import shuffle
 
 class Segment:
     """
-    Bla bla
+    Class for a line segment defined by two points
     """
 
     def __init__(self, p1, p2):
@@ -30,7 +30,6 @@ def read_input(file_path):
             segments.append(Segment((line[0], line[1]), (line[2], line[3])))
 
         return shuffle(segments), bbox
-
 
 
 def main():
