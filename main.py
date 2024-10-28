@@ -22,7 +22,8 @@ def read_input(file_path):
             p2 = Point(line[2], line[3])
             segments.append(Segment(p1, p2))
 
-        return shuffle(segments), bbox
+        shuffle(segments)
+        return segments, bbox
 
 
 def main():
