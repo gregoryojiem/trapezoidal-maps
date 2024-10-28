@@ -1,4 +1,4 @@
-from dag_structures import Node, Internal, Leaf
+from dag_structures import Node, PointNode, SegNode, Leaf
 from trapezoidal_map import Trapezoid
 
 
@@ -15,7 +15,7 @@ def handle_case2(seg, node_leaf):
     right = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, seg.p2, trap.right_vert)))
     left = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, seg.p1)))
 
-    s = Node(Internal(up, down))
-    q = Node(Internal(s, right))
-    p = Node(Internal(left, q))
+    s = Node(SegNode(up, down, seg))
+    q = Node(PointNode(s, right, seg.p2))
+    p = PointNode(left, q, seg.p1)
     node_leaf.data = p
