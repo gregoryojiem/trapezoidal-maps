@@ -1,3 +1,5 @@
+from dir_acyc_graph import DAG
+
 class Point:
     """
     Todo
@@ -43,7 +45,7 @@ class TrapezoidalMap:
     Todo
     """
     def __init__(self, line_segments, bbox):
-        self.trapezoids = []
+        self.dag = DAG()
         self.line_segments = line_segments
         self.bbox = bbox
 

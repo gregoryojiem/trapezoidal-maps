@@ -2,9 +2,8 @@ class DAG:
     def __init__(self):
         self.head = None
 
-    def resolve_case1(self): return None
-    def resolve_case2(self): return None
-    def resolve_case3(self): return None
+    def add_new_segment(self, segment):
+        pass
 
     def create_output_matrix(self):
         return None
