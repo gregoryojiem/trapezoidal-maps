@@ -9,10 +9,15 @@ class Point:
         self.y = y
 
     def is_right_of(self, point):
-        return True if self.x > point.x else False
+        return self.x > point.x
 
-    def is_above(self, segment):
-        pass
+    def is_above(self, obj): #todo refactor
+        if isinstance(obj, Point):
+            return self.y > obj.y
+
+        seg = obj
+        cross_product = (seg.p2.x - seg.p1.x) * (self.y - seg.p1.y) - (seg.p2.y - seg.p1.y) * (self.x - seg.p1.x)
+        return cross_product > 0
 
     def __str__(self):
         return f"({self.x}, {self.y})"
@@ -27,8 +32,11 @@ class Segment:
         self.p1 = p1
         self.p2 = p2
 
-    def is_above(self, segment):
-        pass
+    def get_lower_point(self):
+        min(self.p1, self.p2, key=lambda p: p.y)
+
+    def get_higher_point(self):
+        max(self.p1, self.p2, key=lambda p: p.y)
 
     def __str__(self):
         return f"{self.p1}-{self.p2}"
