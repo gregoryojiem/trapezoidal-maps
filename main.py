@@ -7,16 +7,7 @@ Holden Lalumiere, hll7371
 
 import visualizations
 from random import shuffle
-
-
-class Segment:
-    """
-    Class for a line segment defined by two points
-    """
-
-    def __init__(self, p1, p2):
-        self.p1 = p1
-        self.p2 = p2
+from trapezoidal_map import Segment, Point
 
 
 def read_input(file_path):
@@ -27,7 +18,9 @@ def read_input(file_path):
 
         for _ in range(num_segments):
             line = [int(x) for x in file.readline().split()]
-            segments.append(Segment((line[0], line[1]), (line[2], line[3])))
+            p1 = Point(line[0], line[1])
+            p2 = Point(line[2], line[3])
+            segments.append(Segment(p1, p2))
 
         return shuffle(segments), bbox
 
@@ -35,6 +28,7 @@ def read_input(file_path):
 def main():
     line_segments, bbox = read_input("data/gro3228.txt")
     visualizations.plot_segments(line_segments, bbox)
+
 
 if __name__ == '__main__':
     main()
