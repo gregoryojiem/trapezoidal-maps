@@ -12,7 +12,7 @@ def handle_case1(p, seg, node_leaf):
     """
     trap = node_leaf.data.trap
     is_left_end_point = True if seg.p1 == p else False
-
+    #todo change to use is_right_of?
     if is_left_end_point:
         up_left = p
         up_right = seg.p2 if seg.p2.x <= trap.top_seg.x else trap.top_seg.p2

@@ -9,7 +9,7 @@ class Point:
         self.y = y
 
     def is_right_of(self, point):
-        pass
+        return True if self.x > point.x else False
 
     def is_above(self, segment):
         pass
