@@ -1,4 +1,7 @@
 class Point:
+    """
+    Todo
+    """
     def __init__(self, x, y):
         self.x = x
         self.y = y
@@ -9,7 +12,7 @@ class Point:
 
 class Segment:
     """
-    Bla bla
+    Todo
     """
 
     def __init__(self, p1, p2):
@@ -36,7 +39,13 @@ class Trapezoid:
 
 
 class TrapezoidalMap:
-    def __init__(self, line_segments):
+    """
+    Todo
+    """
+    def __init__(self, line_segments, bbox):
         self.trapezoids = []
         self.line_segments = line_segments
+        self.bbox = bbox
 
+    def __str__(self):
+        return "[" + "\n".join("{!s}".format(x) for x in self.line_segments) + "]"
