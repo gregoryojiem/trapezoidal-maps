@@ -6,6 +6,7 @@ Holden Lalumiere, hll7371
 """
 
 import visualizations
+from random import shuffle
 
 
 class Segment:
@@ -28,7 +29,7 @@ def read_input(file_path):
             line = [int(x) for x in file.readline().split()]
             segments.append(Segment((line[0], line[1]), (line[2], line[3])))
 
-        return segments, bbox
+        return shuffle(segments), bbox
 
 
 def main():
