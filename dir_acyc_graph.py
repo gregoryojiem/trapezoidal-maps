@@ -15,6 +15,13 @@ class Internal:
         self.left = left
         self.right = right
 
+    def is_child_left(self, node):
+        if self.left == node:
+            return True
+        elif self.right == node:
+            return False
+        else:
+            raise Exception("Not the parent of the child")
 
 class Leaf:
     def __init__(self, trap):
