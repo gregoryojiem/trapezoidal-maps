@@ -1,4 +1,4 @@
-from dir_acyc_graph import Node, Internal, Leaf
+from dag_structures import Node, Internal, Leaf
 from trapezoidal_map import Trapezoid
 
 
