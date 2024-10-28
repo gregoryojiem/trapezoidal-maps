@@ -11,6 +11,14 @@ from rand_incr_alg import randomized_incremental_algorithm
 
 
 def read_input(file_path):
+    """
+    Reads input file from the file path
+    First line is number of line segments
+    Second line is the bounding box which contains all line segments
+    in p1x, p1y, p2x, p2y format
+    The rest of the lines are the n line segments
+    :param file_path: File path to read input from
+    """
     with open(file_path, 'r') as file:
         num_segments = int(file.readline())
         bbox = [int(x) for x in file.readline().split()]
