@@ -1,4 +1,4 @@
-from dag_structures import Node, Internal, Leaf
+from dag_structures import Node, PointNode, SegNode, Leaf
 from trapezoidal_map import Trapezoid
 
 
@@ -16,5 +16,5 @@ def handle_case3(seg, node_leaf):
 
     up = Node(Trapezoid(trap.top_seg, seg, up_left, up_right))
     down = Node(Trapezoid(seg, trap.bot_seg, down_left, down_right))
-    s = Node(Internal(up, down))
+    s = SegNode(up, down, seg)
     node_leaf.data = s
