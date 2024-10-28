@@ -43,6 +43,9 @@ class Segment:
 
 
 class Trapezoid:
+    """
+    Trapezoid defined by a top and bottom segment and a left and right vertex
+    """
     def __init__(self, top_seg, bot_seg, left_vert, right_vert):
         """
         Creates a trapezoid
@@ -59,9 +62,14 @@ class Trapezoid:
 
 class TrapezoidalMap:
     """
-    Todo
+    Holds information about the bounding box, the line segments, and the DAG
     """
     def __init__(self, line_segments, bbox):
+        """
+        Contains important information to the algorithm
+        :param line_segments: List of line segments
+        :param bbox: Trapezoid of the bounding box for the line segments
+        """
         bbox_p1 = Point(bbox[0], bbox[1])
         bbox_p2 = Point(bbox[2], bbox[3])
         top_seg = Segment(Point(bbox_p1.x, bbox_p2.y), bbox_p2)
