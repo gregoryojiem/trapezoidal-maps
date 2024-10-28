@@ -9,6 +9,11 @@ class DAG:
         return None
 
 
+class Node:
+    def __init__(self, data):
+        self.data = data
+
+
 class Internal:
     def __init__(self, left, right):
         super().__init__()
@@ -22,6 +27,7 @@ class Internal:
             return False
         else:
             raise Exception("Not the parent of the child")
+
 
 class Leaf:
     def __init__(self, trap):
