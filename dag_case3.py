@@ -9,11 +9,10 @@ def handle_case3(seg, node_leaf):
     :param node_leaf: Leaf node which contains the trapezoid
     """
     trap = node_leaf.data.trap
-    #todo change to use is_right_of?
-    up_right = seg.p2 if seg.p2.x <= trap.top_seg.x else trap.top_seg.p2
-    up_left = seg.p1 if seg.p1.x >= trap.top_seg.x else trap.top_seg.p1
-    down_right = seg.p2 if seg.p2.x <= trap.bot_seg.x else trap.top_seg.p2
-    down_left = seg.p1 if seg.p1.x >= trap.bot_seg.x else trap.bot_seg.p1
+    up_right = seg.p2 if not seg.p2.is_right_of(trap.top_seg.p2) else trap.top_seg.p2
+    up_left = seg.p1 if seg.p1.is_right_of(trap.top_seg) else trap.top_seg.p1
+    down_right = seg.p2 if not seg.p2.is_right_of(trap.bot_seg.p2) else trap.bot_seg.p2
+    down_left = seg.p1 if seg.p1.is_right_of(trap.bot_seg) else trap.bot_seg.p1
 
     up = Node(Trapezoid(trap.top_seg, seg, up_left, up_right))
     down = Node(Trapezoid(seg, trap.bot_seg, down_left, down_right))
