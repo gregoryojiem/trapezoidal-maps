@@ -34,6 +34,10 @@ class Segment:
         return min(self.p1, self.p2, key=lambda p: p.y)
 
     def get_higher_point(self):
+        """
+        Finds the Point with the larger y value
+        :returns: The higher Point
+        """
         return max(self.p1, self.p2, key=lambda p: p.y)
 
     def __str__(self):
