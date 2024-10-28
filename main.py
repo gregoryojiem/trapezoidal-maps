@@ -32,6 +32,7 @@ def read_input(file_path):
         return shuffle(segments), bbox
 
 
+
 def main():
     line_segments, bbox = read_input("data/gro3228.txt")
     visualizations.plot_segments(line_segments, bbox)
