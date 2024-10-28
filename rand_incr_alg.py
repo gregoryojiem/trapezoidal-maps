@@ -3,6 +3,12 @@ from dir_acyc_graph import DAG
 
 
 def randomized_incremental_algorithm(trap_map):
+    """
+    Loops through all line segments in a randomized order and calls the DAG to update itself
+    :param trap_map: TrapezoidalMap containing all important data
+    :returns: Directed Acyclic Graph
+    """
+    # TODO remove seeding
     random.Random(1).shuffle(trap_map.line_segments)
     segments = trap_map.line_segments
     num_segments = len(segments)
