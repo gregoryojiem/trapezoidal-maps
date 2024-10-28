@@ -2,15 +2,15 @@ from dir_acyc_graph import Node, Internal, Leaf
 from trapezoidal_map import Trapezoid
 
 
-def handle_case1(p, seg, leaf):
+def handle_case1(p, seg, node_leaf):
     """
     Replaces the Leaf node with a new tree that represents
     Accounts for if p is a left or right end point
     :param p: Point in the trapezoid
     :param seg: Segment that was added to the graph
-    :param leaf: Leaf containing the trapezoid
+    :param node_leaf: Leaf containing the trapezoid
     """
-    trap = leaf.data.trap
+    trap = node_leaf.data.trap
     is_left_end_point = True if seg.p1 == p else False
 
     if is_left_end_point:
@@ -44,4 +44,4 @@ def handle_case1(p, seg, leaf):
         pr = left_or_right
 
     p = Node(Internal(pl, pr))
-    leaf.data = p
+    node_leaf.data = p
