@@ -3,6 +3,13 @@ from trapezoidal_map import Trapezoid
 
 
 def handle_case1(p, seg, leaf):
+    """
+    Replaces the Leaf node with a new tree that represents
+    Accounts for if p is a left or right end point
+    :param p: Point in the trapezoid
+    :param seg: Segment that was added to the graph
+    :param leaf: Leaf containing the trapezoid
+    """
     trap = leaf.data.trap
     is_left_end_point = True if seg.p1 == p else False
 
