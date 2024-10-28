@@ -31,10 +31,10 @@ class Segment:
         self.p2 = p2
 
     def get_lower_point(self):
-        min(self.p1, self.p2, key=lambda p: p.y)
+        return min(self.p1, self.p2, key=lambda p: p.y)
 
     def get_higher_point(self):
-        max(self.p1, self.p2, key=lambda p: p.y)
+        return max(self.p1, self.p2, key=lambda p: p.y)
 
     def __str__(self):
         return f"{self.p1}-{self.p2}"

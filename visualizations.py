@@ -19,3 +19,7 @@ def plot_segments(segments, bounds):
     ax.set_ylabel("Y")
     ax.set_title("Line Segments")
     plt.show()
+
+
+def plot_dag(dag):
+    pass

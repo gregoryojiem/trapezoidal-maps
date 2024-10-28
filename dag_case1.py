@@ -18,9 +18,9 @@ def handle_case1(point, seg, node_leaf):
         down_left = point
         down_right = seg.p2 if not seg.p2.is_right_of(trap.bot_seg.p2) else trap.bot_seg.p2
     else:
-        up_left = seg.p1 if seg.p1.is_right_of(trap.top_seg) else trap.top_seg.p1
+        up_left = seg.p1 if seg.p1.is_right_of(trap.top_seg.p1) else trap.top_seg.p1
         up_right = point
-        down_left = seg.p1 if seg.p1.is_right_of(trap.bot_seg) else trap.bot_seg.p1
+        down_left = seg.p1 if seg.p1.is_right_of(trap.bot_seg.p1) else trap.bot_seg.p1
         down_right = point
     up = Node(Leaf(Trapezoid(trap.top_seg, seg, up_left, up_right)))
     down = Node(Leaf(Trapezoid(seg, trap.bot_seg, down_left, down_right)))

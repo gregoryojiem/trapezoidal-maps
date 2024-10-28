@@ -36,9 +36,9 @@ def read_input(file_path):
 def main():
     line_segments, bbox = read_input("data/gro3228.txt")
     trapezoidal_map = TrapezoidalMap(line_segments, bbox)
-    randomized_incremental_algorithm(trapezoidal_map)
-    visualizations.plot_segments(line_segments, bbox)
-
+    dag = randomized_incremental_algorithm(trapezoidal_map)
+    #visualizations.plot_segments(line_segments, bbox)
+    visualizations.plot_dag(dag)
 
 if __name__ == '__main__':
     main()

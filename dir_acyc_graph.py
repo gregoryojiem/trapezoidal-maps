@@ -33,15 +33,15 @@ class DAG:
 
         if isinstance(curr_node, PointNode):
             if not point.is_right_of(curr_node.point):
-                return self.find_trapezoids(curr_node.left, point)
+                return self.find_point_region(curr_node.left, point)
             else:
-                return self.find_trapezoids(curr_node.right, point)
+                return self.find_point_region(curr_node.right, point)
 
         if isinstance(curr_node, SegNode):
             if point.is_above(curr_node.seg):
-                return self.find_trapezoids(curr_node.left, point)
+                return self.find_point_region(curr_node.left, point)
             else:
-                return self.find_trapezoids(curr_node.right, point)
+                return self.find_point_region(curr_node.right, point)
 
     def find_trapezoids(self, node, seg):
         curr_node = node.data
@@ -51,24 +51,24 @@ class DAG:
 
         if isinstance(curr_node, PointNode):
             if not seg.p2.is_right_of(curr_node.point):  # segment is fully left of the point
-                return {self.find_trapezoids(curr_node.left, seg)}
+                return self.find_trapezoids(curr_node.left, seg)
             elif seg.p1.is_right_of(curr_node.point):  # segment is fully right of the point
-                return {self.find_trapezoids(curr_node.right, seg)}
+                return self.find_trapezoids(curr_node.right, seg)
             else:  # the point is in between the segment endpoints
-                return {self.find_trapezoids(curr_node.right, seg)} \
-                    .union({self.find_trapezoids(curr_node.left, seg)})
+                return self.find_trapezoids(curr_node.right, seg) \
+                    .union(self.find_trapezoids(curr_node.left, seg))
 
         if isinstance(curr_node, SegNode):
             seg_lowest_point = seg.get_lower_point()
             seg_higher_point = seg.get_higher_point()
 
             if not seg_higher_point.is_above(curr_node.seg.get_lower_point()):
-                return {self.find_trapezoids(curr_node.right, seg)}
+                return self.find_trapezoids(curr_node.right, seg)
             elif seg_lowest_point.is_above(curr_node.seg.get_higher_point()):
-                return {self.find_trapezoids(curr_node.left, seg)}
+                return self.find_trapezoids(curr_node.left, seg)
             else:
-                return {self.find_trapezoids(curr_node.right, seg)} \
-                    .union({self.find_trapezoids(curr_node.left, seg)})
+                return self.find_trapezoids(curr_node.right, seg) \
+                    .union(self.find_trapezoids(curr_node.left, seg))
 
     def create_output_matrix(self):
         return None
