@@ -2,13 +2,14 @@ from dag_structures import Node, PointNode, SegNode, Leaf
 from trapezoidal_map import Trapezoid
 
 
-def handle_case1(point, seg, node_leaf):
+def handle_case1(point, seg, node_leaf, past_traps=None):
     """
     Replaces the Leaf node with a new tree that represents
     Accounts for if p is a left or right end point
     :param point: Point in the trapezoid
     :param seg: Segment that was added to the graph
     :param node_leaf: Leaf containing the trapezoid
+    :param past_traps: Trapezoids created that might be merged with this case
     """
     trap = node_leaf.data.trap
     is_left_end_point = seg.p1 == point
@@ -46,4 +47,4 @@ def handle_case1(point, seg, node_leaf):
 
     p = PointNode(pl, pr, point)
     node_leaf.data = p
-    print(p)
+    return [up, down]

@@ -2,11 +2,12 @@ from dag_structures import Node, PointNode, SegNode, Leaf
 from trapezoidal_map import Trapezoid
 
 
-def handle_case3(seg, node_leaf):
+def handle_case3(seg, node_leaf, past_traps):
     """
     Replaces the Leaf node with a new tree that represents
     :param seg: Segment that was added to the graph
     :param node_leaf: Leaf node which contains the trapezoid
+    :param past_traps: Trapezoids created that might be merged with this case
     """
     trap = node_leaf.data.trap
     up_right = seg.p2 if not seg.p2.is_right_of(trap.top_seg.p2) else trap.top_seg.p2
@@ -18,3 +19,4 @@ def handle_case3(seg, node_leaf):
     down = Node(Trapezoid(seg, trap.bot_seg, down_left, down_right))
     s = SegNode(up, down, seg)
     node_leaf.data = s
+    return [up, down]

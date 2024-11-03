@@ -20,11 +20,13 @@ class DAG:
         right_point_region = self.find_point_region(self.head, seg.p2)
         affected_trapezoids.remove(left_point_region)
         affected_trapezoids.remove(right_point_region)
-        handle_case1(seg.p1, seg, left_point_region)
-        handle_case1(seg.p2, seg, right_point_region)
+        resultant_traps = handle_case1(seg.p1, seg, left_point_region)
 
         for trapezoid in affected_trapezoids:
-            handle_case3(seg, trapezoid)
+            resultant_traps = handle_case3(seg, trapezoid, resultant_traps)
+
+        handle_case1(seg.p2, seg, right_point_region, resultant_traps)
+
 
     def find_point_region(self, node, point):
         curr_node = node.data
