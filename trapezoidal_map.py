@@ -40,6 +40,12 @@ class Segment:
         """
         return max(self.p1, self.p2, key=lambda p: p.y)
 
+    def get_y_at_x(self, x):
+        """Returns the y-coordinate of the line segment at the given x-value."""
+        slope = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x)  # Calculate slope
+        y = slope * (x - self.p1.x) + self.p1.y  # Calculate y-intercept
+        return y
+
     def __str__(self):
         return f"{self.p1}-{self.p2}"
 

@@ -5,6 +5,7 @@ Gregory Ojiem, gro3228
 Holden Lalumiere, hll7371
 """
 
+import matplotlib.pyplot as plt
 import visualizations
 from trapezoidal_map import Segment, Point, TrapezoidalMap
 from rand_incr_alg import randomized_incremental_algorithm
@@ -34,11 +35,11 @@ def read_input(file_path):
 
 
 def main():
-    line_segments, bbox = read_input("data/gro3228.txt")
+    line_segments, bbox = read_input("data/hll7371.txt")
     trapezoidal_map = TrapezoidalMap(line_segments, bbox)
     dag = randomized_incremental_algorithm(trapezoidal_map)
-    #visualizations.plot_segments(line_segments, bbox)
-    visualizations.plot_dag(dag)
+    visualizations.plot_dag(dag, bbox)
+
 
 if __name__ == '__main__':
     main()
