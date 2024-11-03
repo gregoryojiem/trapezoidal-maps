@@ -9,6 +9,7 @@ class DAG:
         self.head = Node(Leaf(bounding_trapezoid))
 
     def add_new_segment(self, seg):
+        print("Adding new segment: " + str(seg))
         affected_trapezoids = list(self.find_trapezoids(self.head, seg))
 
         if len(affected_trapezoids) == 1:

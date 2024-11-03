@@ -55,6 +55,7 @@ def plot_dag_recursive(node, ax):
 
     if isinstance(curr_node, Leaf):
         trap = curr_node.trap
+        print("Drawing trapezoid: " + str(trap))
         mid_p_y = (trap.top_seg.p1.y + trap.bot_seg.p2.y) / 2
         mid_p_x = (trap.right_vert.x + trap.left_vert.x) / 2
         if (mid_p_x, mid_p_y) in regions_seen:

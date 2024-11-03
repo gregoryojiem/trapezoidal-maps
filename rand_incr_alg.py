@@ -16,4 +16,5 @@ def randomized_incremental_algorithm(trap_map):
     for _ in range(0, num_segments):
         segment = segments.pop(0)
         dag.add_new_segment(segment)
+    print("Done generating DAG")
     return dag
