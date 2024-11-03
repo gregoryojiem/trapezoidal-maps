@@ -58,7 +58,7 @@ def plot_dag_recursive(node, ax):
         trap = curr_node.trap
         print("Drawing trapezoid: " + str(trap))
         color = colors(trap_region_count % 10)
-        print(f"Color: {int(color[0] * 255), int(color[1] * 255), int(color[2] * 255)}" + "\n")
+        print(f"Color: {int(color[0] * 255), int(color[1] * 255), int(color[2] * 255)}")
         mid_p_y = (trap.top_seg.p1.y + trap.bot_seg.p2.y) / 2
         mid_p_x = (trap.right_vert.x + trap.left_vert.x) / 2
         if (mid_p_x, mid_p_y) in regions_seen:
@@ -77,6 +77,8 @@ def plot_dag_recursive(node, ax):
             (rightmost_x, top_right_y),
             (leftmost_x, top_left_y),
         ]
+        print("vertices: " + str(vertices))
+        print()
 
         polygon = np.array(vertices)
         ax.fill(polygon[:, 0], polygon[:, 1], color=color, alpha=0.5)
