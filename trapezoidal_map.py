@@ -1,12 +1,23 @@
 class Point:
     """
-    Todo
+    Class for a 2D point
+    Stores the x and y coordinate
     """
     def __init__(self, x, y):
+        """
+        Initialize a point with x and y coordinates
+        :param x: x coordinate
+        :param y: y coordinate
+        """
         self.x = x
         self.y = y
 
     def is_right_of(self, point):
+        """
+        Check if this point's x coordinate is greater than the x coordinate of another point
+        :param point: Point to check against
+        :returns: True if this point is to the right of the other point, False otherwise
+        """
         return self.x > point.x
 
     def is_above(self, obj): #todo refactor
