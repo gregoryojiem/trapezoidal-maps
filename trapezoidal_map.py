@@ -78,6 +78,9 @@ class Trapezoid:
         self.left_vert = left_vert
         self.right_vert = right_vert
 
+    def __str__(self):
+        return f"{self.top_seg}, {self.bot_seg}\n{self.left_vert}, {self.right_vert}"
+
 
 class TrapezoidalMap:
     """
