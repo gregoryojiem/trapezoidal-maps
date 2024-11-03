@@ -21,6 +21,13 @@ class Point:
         return self.x > point.x
 
     def is_above(self, obj): #todo refactor
+        """
+        Checks if this Point is above the given Point or Segment
+        By checking the y coordinate, or the cross product
+        :param obj: A Point or a Segment
+        :returns: For a Point, True, if this point is above the point, False otherwise
+        For a Segment, True if this point  is above the segment, False otherwise
+        """
         if isinstance(obj, Point):
             return self.y > obj.y
 
