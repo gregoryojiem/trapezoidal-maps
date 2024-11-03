@@ -35,6 +35,7 @@ def plot_dag(dag, bounds):
 
 trap_region_count = 0
 regions_seen = []
+colors = plt.cm.get_cmap('hsv', 10)
 
 
 def plot_dag_recursive(node, ax):
@@ -56,6 +57,8 @@ def plot_dag_recursive(node, ax):
     if isinstance(curr_node, Leaf):
         trap = curr_node.trap
         print("Drawing trapezoid: " + str(trap))
+        color = colors(trap_region_count % 10)
+        print(f"Color: {int(color[0] * 255), int(color[1] * 255), int(color[2] * 255)}" + "\n")
         mid_p_y = (trap.top_seg.p1.y + trap.bot_seg.p2.y) / 2
         mid_p_x = (trap.right_vert.x + trap.left_vert.x) / 2
         if (mid_p_x, mid_p_y) in regions_seen:
@@ -76,7 +79,7 @@ def plot_dag_recursive(node, ax):
         ]
 
         polygon = np.array(vertices)
-        ax.fill(polygon[:, 0], polygon[:, 1], alpha=0.5)
+        ax.fill(polygon[:, 0], polygon[:, 1], color=color, alpha=0.5)
 
         trap_region_count += 1
         regions_seen.append((mid_p_x, mid_p_y))
