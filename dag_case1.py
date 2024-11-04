@@ -32,7 +32,7 @@ def handle_case1_left(point, seg, node_leaf):
     node_leaf.data = p
     return [up, down]
 
-def handle_case1_right(point, seg, node_leaf, past_traps=None):
+def handle_case1_right(point, seg, node_leaf, past_traps):
     """
     TODO
     :param point: Point in the trapezoid
@@ -42,14 +42,14 @@ def handle_case1_right(point, seg, node_leaf, past_traps=None):
     """
     trap = node_leaf.data.trap
 
-    if past_traps is not None and past_traps[0].data.trap.top_seg == trap.top_seg:
+    if past_traps[0].data.trap.top_seg == trap.top_seg:
         up = past_traps[0]
     else:
         up_left = seg.p1 if seg.p1.is_right_of(trap.left_vert) else trap.left_vert
         up_right = point
         up = Node(Leaf(Trapezoid(trap.top_seg, seg, up_left, up_right)))
 
-    if past_traps is not None and past_traps[0].data.trap.bot_seg == trap.bot_seg:
+    if past_traps[0].data.trap.bot_seg == trap.bot_seg:
         down = past_traps[1]
     else:
         down_left = seg.p1 if seg.p1.is_right_of(trap.bot_seg.p1) else trap.bot_seg.p1
