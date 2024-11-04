@@ -8,6 +8,7 @@ def handle_case1_left(point, seg, node_leaf):
     :param point: Point in the trapezoid
     :param seg: Segment that was added to the graph
     :param node_leaf: Leaf containing the trapezoid
+    :returns: todo
     """
     trap = node_leaf.data.trap
     up_left = point
