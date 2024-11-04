@@ -85,6 +85,23 @@ class Trapezoid:
         self.left_vert = left_vert
         self.right_vert = right_vert
 
+    def get_vertices(self):
+        leftmost_x = self.left_vert.x
+        rightmost_x = self.right_vert.x
+        top_left_y = self.top_seg.get_y_at_x(leftmost_x)
+        top_right_y = self.top_seg.get_y_at_x(rightmost_x)
+        bot_left_y = self.bot_seg.get_y_at_x(leftmost_x)
+        bot_right_y = self.bot_seg.get_y_at_x(rightmost_x)
+
+        vertices = [
+            (leftmost_x, bot_left_y),
+            (rightmost_x, bot_right_y),
+            (rightmost_x, top_right_y),
+            (leftmost_x, top_left_y),
+        ]
+
+        return vertices
+
     def __str__(self):
         return f"{self.top_seg}, {self.bot_seg}\n{self.left_vert.x}, {self.right_vert.x}"
 
