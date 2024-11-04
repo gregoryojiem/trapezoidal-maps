@@ -18,7 +18,7 @@ def handle_case3(seg, node_leaf, past_traps):
         up_left = seg.p1 if seg.p1.is_right_of(trap.top_seg.p1) else trap.top_seg.p1
         up = Node(Leaf(Trapezoid(trap.top_seg, seg, up_left, up_right)))
 
-    if past_traps is not None and past_traps[0].data.trap.bot_seg == trap.bot_seg:
+    if past_traps is not None and past_traps[1].data.trap.bot_seg == trap.bot_seg:
         down = past_traps[1]
     else:
         down_right = seg.p2 if not seg.p2.is_right_of(trap.bot_seg.p2) else trap.bot_seg.p2
