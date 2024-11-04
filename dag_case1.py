@@ -2,34 +2,40 @@ from dag_structures import Node, PointNode, SegNode, Leaf
 from trapezoidal_map import Trapezoid
 
 
-def handle_case1_left(point, seg, node_leaf, degenerate_point):
+def handle_case1_left(left_endpoint, seg, node_leaf, degenerate_point):
     """
     TODO
-    :param point: Point in the trapezoid
+    :param left_endpoint: Point in the trapezoid
     :param seg: Segment that was added to the graph
     :param node_leaf: Leaf containing the trapezoid
     :returns: todo
     """
     trap = node_leaf.data.trap
-    up_left = point
-    up_right = seg.p2 if not seg.p2.is_right_of(trap.right_vert) else trap.right_vert
-    up = Node(Leaf(Trapezoid(trap.top_seg, seg, up_left, up_right)))
+    if left_endpoint.is_above(trap.right_vert):
+        up_trap_r_bound = seg.p2 if not seg.p2.is_right_of(trap.top_seg.p2) else trap.top_seg.p2
+    else:
+        up_trap_r_bound = seg.p2 if not seg.p2.is_right_of(trap.right_vert) else trap.right_vert
 
-    down_left = point
-    down_right = seg.p2 if not seg.p2.is_right_of(trap.bot_seg.p2) else trap.bot_seg.p2
-    down = Node(Leaf(Trapezoid(seg, trap.bot_seg, down_left, down_right)))
+    up = Node(Leaf(Trapezoid(trap.top_seg, seg, left_endpoint, up_trap_r_bound)))
+
+    if left_endpoint.is_above(trap.right_vert):
+        down_trap_r_bound = seg.p2 if not seg.p2.is_right_of(trap.right_vert) else trap.right_vert
+    else:
+        down_trap_r_bound = seg.p2 if not seg.p2.is_right_of(trap.bot_seg.p2) else trap.bot_seg.p2
+
+    down = Node(Leaf(Trapezoid(seg, trap.bot_seg, left_endpoint, down_trap_r_bound)))
 
     s = Node(SegNode(up, down, seg))
 
     lr_left = trap.top_seg.p1 if trap.top_seg.p1.is_right_of(trap.bot_seg.p1) else trap.bot_seg.p1
-    lr_right = point
+    lr_right = left_endpoint
 
     if degenerate_point is not None:
         left_node = degenerate_point.data.left
     else:
         left_node = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, lr_left, lr_right)))
 
-    p = PointNode(left_node, s, point)
+    p = PointNode(left_node, s, left_endpoint)
     node_leaf.data = p
     return [up, down]
 
