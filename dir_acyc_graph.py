@@ -1,5 +1,5 @@
 from dag_structures import Node, PointNode, SegNode, Leaf
-from dag_case1 import handle_case1
+from dag_case1 import handle_case1_left, handle_case1_right
 from dag_case2 import handle_case2
 from dag_case3 import handle_case3
 
@@ -20,12 +20,12 @@ class DAG:
         right_point_region = self.find_point_region(self.head, seg.p2)
         affected_trapezoids.remove(left_point_region)
         affected_trapezoids.remove(right_point_region)
-        resultant_traps = handle_case1(seg.p1, seg, left_point_region)
+        resultant_traps = handle_case1_left(seg.p1, seg, left_point_region)
 
         for trapezoid in affected_trapezoids:
             resultant_traps = handle_case3(seg, trapezoid, resultant_traps)
 
-        handle_case1(seg.p2, seg, right_point_region, resultant_traps)
+        handle_case1_right(seg.p2, seg, right_point_region, resultant_traps)
 
 
     def find_point_region(self, node, point):
