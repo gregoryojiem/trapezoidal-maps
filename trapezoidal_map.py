@@ -35,6 +35,13 @@ class Point:
         cross_product = (seg.p2.x - seg.p1.x) * (self.y - seg.p1.y) - (seg.p2.y - seg.p1.y) * (self.x - seg.p1.x)
         return cross_product > 0
 
+    def within(self, x1, x2):  # TODO re-examine for degenerate case
+        return x1 < self.x < x2
+
+    def __eq__(self, other):
+        if isinstance(other, Point):
+            return self.x == other.x and self.y == other.y
+
     def __str__(self):
         return f"({self.x}, {self.y})"
 
@@ -48,16 +55,6 @@ class Segment:
         self.p1 = p1
         self.p2 = p2
 
-    def get_lower_point(self):
-        return min(self.p1, self.p2, key=lambda p: p.y)
-
-    def get_higher_point(self):
-        """
-        Finds the Point with the larger y value
-        :returns: The higher Point
-        """
-        return max(self.p1, self.p2, key=lambda p: p.y)
-
     def get_y_at_x(self, x):
         """Returns the y-coordinate of the line segment at the given x-value."""
         slope = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x)  # Calculate slope
@@ -66,6 +63,9 @@ class Segment:
 
     def __str__(self):
         return f"{self.p1}-{self.p2}"
+
+
+id_counter = 1
 
 
 class Trapezoid:
@@ -80,10 +80,13 @@ class Trapezoid:
         :param left_vert: Left vertex
         :param right_vert: Right vertex
         """
+        global id_counter
         self.top_seg = top_seg
         self.bot_seg = bot_seg
         self.left_vert = left_vert
         self.right_vert = right_vert
+        self.trap_id = id_counter
+        id_counter += 1
 
     def get_vertices(self):
         leftmost_x = self.left_vert.x
@@ -99,6 +102,12 @@ class Trapezoid:
             (rightmost_x, top_right_y),
             (leftmost_x, top_left_y),
         ]
+
+        if vertices[1] == vertices[2]:
+            return [vertices[0], vertices[1], vertices[3]]
+
+        if vertices[0] == vertices[3]:
+            return [vertices[0], vertices[1], vertices[2]]
 
         return vertices
 

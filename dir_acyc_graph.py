@@ -1,8 +1,10 @@
+from trapezoidal_map import Point
 from dag_structures import Node, PointNode, SegNode, Leaf
 from dag_case1 import handle_case1_left, handle_case1_right
 from dag_case2 import handle_case2
 from dag_case3 import handle_case3
 import visualizations
+
 
 class DAG:
     def __init__(self, bounding_trapezoid):
@@ -82,16 +84,16 @@ class DAG:
                     .union(self.find_trapezoids(curr_node.left, seg))
 
         if isinstance(curr_node, SegNode):
-            seg_lowest_point = seg.get_lower_point()
-            seg_higher_point = seg.get_higher_point()
+            left_x_bound = curr_node.seg.p1.x
+            right_x_bound = curr_node.seg.p2.x
+            point_to_compare = seg.p1 if seg.p1.within(left_x_bound, right_x_bound) else seg.p2
 
-            if not seg_higher_point.is_above(curr_node.seg.get_lower_point()):
-                return self.find_trapezoids(curr_node.right, seg)
-            elif seg_lowest_point.is_above(curr_node.seg.get_higher_point()):
+            if seg.p2 == curr_node.seg.p2:
+                return self.find_trapezoids(curr_node.right, seg).union(self.find_trapezoids(curr_node.left, seg))
+            if point_to_compare.is_above(curr_node.seg):
                 return self.find_trapezoids(curr_node.left, seg)
             else:
-                return self.find_trapezoids(curr_node.right, seg) \
-                    .union(self.find_trapezoids(curr_node.left, seg))
+                return self.find_trapezoids(curr_node.right, seg)
 
     def create_output_matrix(self):
         return None
