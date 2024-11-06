@@ -25,6 +25,9 @@ class Node:
     def right_vert(self):
         return self.data.trap.right_vert
 
+    def __str__(self):
+        return str(self.data)
+
 
 
 class Internal:
@@ -69,6 +72,9 @@ class PointNode(Internal):
         super().__init__(left, right)
         self.point = point
 
+    def __str__(self):
+        return str(self.point)
+
 
 class SegNode(Internal):
     """
@@ -85,6 +91,8 @@ class SegNode(Internal):
         super().__init__(left, right)
         self.seg = seg
 
+    def __str__(self):
+        return str(self.seg)
 
 class Leaf:
     """
@@ -97,3 +105,6 @@ class Leaf:
         :param trap: Trapezoid to store
         """
         self.trap = trap
+
+    def __str__(self):
+        return str(self.trap)
