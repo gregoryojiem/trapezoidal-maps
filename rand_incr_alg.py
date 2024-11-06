@@ -9,7 +9,7 @@ def randomized_incremental_algorithm(trap_map, bbox):
     :returns: Directed Acyclic Graph
     """
     # TODO remove seeding
-    random.Random(1).shuffle(trap_map.line_segments)
+    random.Random(4).shuffle(trap_map.line_segments)
     segments = trap_map.line_segments
     num_segments = len(segments)
     dag = DAG(trap_map.bbox)
