@@ -14,10 +14,13 @@ class DAG:
         print("Adding new segment: " + str(seg))
         affected_trapezoids = list(self.find_trapezoids(self.head, seg))
 
+        visualizations.regions_seen = []
         if len(affected_trapezoids) == 1:
-            handle_case2(seg, affected_trapezoids[0])
             visualizations.plot_dag(self, bbox)
+            handle_case2(seg, affected_trapezoids[0])
             return
+
+        visualizations.plot_dag(self, bbox)
 
         left_point_region = self.find_point_region(self.head, seg.p1)
         right_point_region = self.find_point_region(self.head, seg.p2)
@@ -80,15 +83,14 @@ class DAG:
             elif seg.p1.is_right_of(curr_node.point):  # segment is fully right of the point
                 return self.find_trapezoids(curr_node.right, seg)
             else:  # the point is in between the segment endpoints
-                return self.find_trapezoids(curr_node.right, seg) \
-                    .union(self.find_trapezoids(curr_node.left, seg))
+                return self.find_trapezoids(curr_node.right, seg).union(self.find_trapezoids(curr_node.left, seg))
 
         if isinstance(curr_node, SegNode):
             left_x_bound = curr_node.seg.p1.x
             right_x_bound = curr_node.seg.p2.x
             point_to_compare = seg.p1 if seg.p1.within(left_x_bound, right_x_bound) else seg.p2
 
-            if seg.p2 == curr_node.seg.p2:
+            if seg.p2 == curr_node.seg.p2 and seg.p1.is_above(curr_node.seg.p1):
                 return self.find_trapezoids(curr_node.right, seg).union(self.find_trapezoids(curr_node.left, seg))
             if point_to_compare.is_above(curr_node.seg):
                 return self.find_trapezoids(curr_node.left, seg)
