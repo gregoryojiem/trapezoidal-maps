@@ -99,13 +99,68 @@ class DAG:
 
     def create_output_matrix(self):
         matrix = [[]]
-        # row1 = []
-        #
-        # for left_point in left_points:
-        #     row1.append(left_point.name)
-        # for i in range(1, len(traps)):
-        #     row1.append(f"T{i}")
-        #
-        #
-        # matrix.append([sum, ])
+        row1 = [None]
+
+        left_points, right_points, segments, trapezoids = [], [], [], []
+        self.traverse_all_nodes(self.head, left_points, right_points, segments, trapezoids)
+        names = []
+        for left_point in set(left_points):
+            row1.append(left_point.point.name)
+            names.append(left_point.point.name)
+        for right_point in set(right_points):
+            row1.append(right_point.point.name)
+            names.append(right_point.point.name)
+        for segment in set(segments):
+            row1.append(segment.seg.name)
+            names.append(segment.seg.name)
+        trapezoids = ["T8", "T7", "T6", "T9", "T3", "T10", "T4"]  # todo remove this
+        for trapezoid in set(trapezoids):
+            row1.append(trapezoid)  # todo remove
+            names.append(trapezoid)
+        #     row1.append(trapezoid.trap.name)
+        #     names.append(trapezoid.trap.name)
+        row1.append("sum")
+        matrix[0] = row1
+
+        blank_row = [0] * len(row1)
+        for i in range(1, len(row1)):
+            matrix.append(blank_row[:])
+
+        for i in range(1, len(matrix) - 1):
+            matrix[i][0] = names[i - 1]
+
+        matrix[-1][0] = "sum"
+        matrix[-1][-1] = None
+
+        # Calculate column sums
+        for j in range(1, len(matrix) - 1):
+            col_sum = 0
+            for i in range(1, len(matrix) - 1):
+                col_sum += matrix[i][j]
+            matrix[-1][j] = col_sum
+
+        # Calculate row sums and print
+        for i in range(len(matrix)):
+            if i not in (0, len(matrix) - 1):
+                matrix[i][-1] = sum(matrix[i][1:])
+            print(matrix[i])
         return matrix
+
+    def traverse_all_nodes(self, node, left_points, right_points, segments, trapezoids):
+        curr_node = node.data
+        if isinstance(curr_node, PointNode):
+            if "P" in curr_node.point.name:
+                left_points.append(curr_node)
+            else:
+                right_points.append(curr_node)
+            self.traverse_all_nodes(curr_node.left, left_points, right_points, segments, trapezoids)
+            self.traverse_all_nodes(curr_node.right, left_points, right_points, segments, trapezoids)
+            return
+        if isinstance(curr_node, SegNode):
+            segments.append(curr_node)
+            self.traverse_all_nodes(curr_node.left, left_points, right_points, segments, trapezoids)
+            self.traverse_all_nodes(curr_node.right, left_points, right_points, segments, trapezoids)
+            return
+        if isinstance(curr_node, Leaf):
+            trapezoids.append(curr_node)
+            return

@@ -126,6 +126,7 @@ class Trapezoid:
     def __str__(self):
         return "T" + str(self.trap_id)
 
+
 class TrapezoidalMap:
     """
     Holds information about the bounding box, the line segments, and the DAG
@@ -136,10 +137,10 @@ class TrapezoidalMap:
         :param line_segments: List of line segments
         :param bbox: Trapezoid of the bounding box for the line segments
         """
-        bbox_p1 = Point(bbox[0], bbox[1])
-        bbox_p2 = Point(bbox[2], bbox[3])
-        top_seg = Segment(Point(bbox_p1.x, bbox_p2.y), bbox_p2)
-        bot_seg = Segment(bbox_p1, Point(bbox_p2.x, bbox_p1.y))
+        bbox_p1 = Point(bbox[0], bbox[1], "B1")
+        bbox_p2 = Point(bbox[2], bbox[3], "B2")
+        top_seg = Segment(Point(bbox_p1.x, bbox_p2.y, "B3"), bbox_p2, "STop")
+        bot_seg = Segment(bbox_p1, Point(bbox_p2.x, bbox_p1.y, "B4"), "SBot")
         self.bbox = Trapezoid(top_seg, bot_seg, bbox_p1, bbox_p2)
         self.line_segments = line_segments
 
