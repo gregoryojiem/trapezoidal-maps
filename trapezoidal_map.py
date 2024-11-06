@@ -3,7 +3,7 @@ class Point:
     Class for a 2D point
     Stores the x and y coordinate
     """
-    def __init__(self, x, y):
+    def __init__(self, x, y, name):
         """
         Initialize a point with x and y coordinates
         :param x: x coordinate
@@ -11,6 +11,7 @@ class Point:
         """
         self.x = x
         self.y = y
+        self.name = name
 
     def is_right_of(self, point):
         """
@@ -61,9 +62,10 @@ class Segment:
     Todo
     """
 
-    def __init__(self, p1, p2):
+    def __init__(self, p1, p2, name):
         self.p1 = p1
         self.p2 = p2
+        self.name = name
 
     def get_y_at_x(self, x):
         """Returns the y-coordinate of the line segment at the given x-value."""

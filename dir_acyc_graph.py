@@ -98,4 +98,14 @@ class DAG:
                 return self.find_trapezoids(curr_node.right, seg)
 
     def create_output_matrix(self):
-        return None
+        matrix = [[]]
+        # row1 = []
+        #
+        # for left_point in left_points:
+        #     row1.append(left_point.name)
+        # for i in range(1, len(traps)):
+        #     row1.append(f"T{i}")
+        #
+        #
+        # matrix.append([sum, ])
+        return matrix
