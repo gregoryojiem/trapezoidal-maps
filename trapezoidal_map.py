@@ -32,6 +32,16 @@ class Point:
             return self.y > obj.y
 
         seg = obj
+        above_seg_p1 = self.is_above(seg.p1)
+        above_seg_p2 = self.is_above(seg.p2)
+
+        if above_seg_p1 and above_seg_p2:
+            return True
+
+        if not above_seg_p2 and not above_seg_p2:
+            return False
+
+        # TODO testing
         cross_product = (seg.p2.x - seg.p1.x) * (self.y - seg.p1.y) - (seg.p2.y - seg.p1.y) * (self.x - seg.p1.x)
         return cross_product > 0
 
@@ -112,8 +122,7 @@ class Trapezoid:
         return vertices
 
     def __str__(self):
-        return f"{self.top_seg}, {self.bot_seg}\n{self.left_vert.x}, {self.right_vert.x}"
-
+        return "T" + str(self.trap_id)
 
 class TrapezoidalMap:
     """
