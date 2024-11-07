@@ -98,39 +98,40 @@ class DAG:
                 return self.find_trapezoids(curr_node.right, seg)
 
     def create_output_matrix(self):
+        node_names = []
+        connections_map = {}
+        self.traverse_all_nodes(self.head, connections_map, node_names)
+        # todo sort node_names by P, Q, T
+        trapezoids = ["T8", "T7", "T6", "T9", "T3", "T10", "T4"]  # todo remove this
+        node_names.extend(trapezoids)  # todo delete
+        node_names = list(set(node_names))
+        node_names = sorted(node_names, key=lambda x: (x[0], int(x[1:])))
+
         matrix = [[]]
         row1 = [None]
-
-        left_points, right_points, segments, trapezoids = [], [], [], []
-        self.traverse_all_nodes(self.head, left_points, right_points, segments, trapezoids)
-        names = []
-        for left_point in set(left_points):
-            row1.append(left_point.point.name)
-            names.append(left_point.point.name)
-        for right_point in set(right_points):
-            row1.append(right_point.point.name)
-            names.append(right_point.point.name)
-        for segment in set(segments):
-            row1.append(segment.seg.name)
-            names.append(segment.seg.name)
-        trapezoids = ["T8", "T7", "T6", "T9", "T3", "T10", "T4"]  # todo remove this
-        for trapezoid in set(trapezoids):
-            row1.append(trapezoid)  # todo remove
-            names.append(trapezoid)
-        #     row1.append(trapezoid.trap.name)
-        #     names.append(trapezoid.trap.name)
+        row1.extend(node_names)
         row1.append("sum")
         matrix[0] = row1
 
         blank_row = [0] * len(row1)
         for i in range(1, len(row1)):
             matrix.append(blank_row[:])
-
         for i in range(1, len(matrix) - 1):
-            matrix[i][0] = names[i - 1]
-
+            matrix[i][0] = row1[i]
         matrix[-1][0] = "sum"
         matrix[-1][-1] = None
+
+        # Fill in table
+        for i in range(1, len(matrix[0]) - 1):
+            name = matrix[0][i]
+            if 'T' in name:
+                break
+            connections = connections_map.get(name)
+            for connection in connections:
+                if connection is not None:  # TODO remove this once trap is done
+                    j = matrix[0].index(connection)
+                    matrix[i][j] = 1
+                    matrix[j][i] = 1
 
         # Calculate column sums
         for j in range(1, len(matrix) - 1):
@@ -146,21 +147,31 @@ class DAG:
             print(matrix[i])
         return matrix
 
-    def traverse_all_nodes(self, node, left_points, right_points, segments, trapezoids):
+    def traverse_all_nodes(self, node, connections_map, names):
         curr_node = node.data
         if isinstance(curr_node, PointNode):
-            if "P" in curr_node.point.name:
-                left_points.append(curr_node)
+            point_name = curr_node.point.name
+            names.append(point_name)
+            l_name = self.traverse_all_nodes(curr_node.left, connections_map, names)
+            r_name = self.traverse_all_nodes(curr_node.right, connections_map, names)
+            if point_name in connections_map:
+                connections_map.get(point_name).append(l_name)
+                connections_map.get(point_name).append(r_name)
             else:
-                right_points.append(curr_node)
-            self.traverse_all_nodes(curr_node.left, left_points, right_points, segments, trapezoids)
-            self.traverse_all_nodes(curr_node.right, left_points, right_points, segments, trapezoids)
-            return
+                connections_map[point_name] = [l_name, r_name]
+            return point_name
         if isinstance(curr_node, SegNode):
-            segments.append(curr_node)
-            self.traverse_all_nodes(curr_node.left, left_points, right_points, segments, trapezoids)
-            self.traverse_all_nodes(curr_node.right, left_points, right_points, segments, trapezoids)
-            return
+            seg_name = curr_node.seg.name
+            names.append(seg_name)
+            l_name = self.traverse_all_nodes(curr_node.left, connections_map, names)
+            r_name = self.traverse_all_nodes(curr_node.right, connections_map, names)
+            if seg_name in connections_map:
+                connections_map.get(seg_name).append(l_name)
+                connections_map.get(seg_name).append(r_name)
+            else:
+                connections_map[seg_name] = [l_name, r_name]
+            return seg_name
         if isinstance(curr_node, Leaf):
-            trapezoids.append(curr_node)
-            return
+            # trap_name = "?"
+            # names.append(trap_name)  # todo uncomment once Gregory posts the trap names
+            return  # todo, return trap name
