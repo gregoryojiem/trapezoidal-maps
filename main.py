@@ -38,6 +38,7 @@ def main():
     line_segments, bbox = read_input("data/hll7371.txt")
     trapezoidal_map = TrapezoidalMap(line_segments, bbox)
     dag = randomized_incremental_algorithm(trapezoidal_map, bbox)
+    dag.create_output_matrix()
     visualizations.regions_seen = []
     visualizations.trap_region_count = 0
     visualizations.plot_dag(dag, bbox)

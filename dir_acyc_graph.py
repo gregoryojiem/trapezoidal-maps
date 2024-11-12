@@ -98,14 +98,80 @@ class DAG:
                 return self.find_trapezoids(curr_node.right, seg)
 
     def create_output_matrix(self):
+        node_names = []
+        connections_map = {}
+        self.traverse_all_nodes(self.head, connections_map, node_names)
+        # todo sort node_names by P, Q, T
+        trapezoids = ["T8", "T7", "T6", "T9", "T3", "T10", "T4"]  # todo remove this
+        node_names.extend(trapezoids)  # todo delete
+        node_names = list(set(node_names))
+        node_names = sorted(node_names, key=lambda x: (x[0], int(x[1:])))
+
         matrix = [[]]
-        # row1 = []
-        #
-        # for left_point in left_points:
-        #     row1.append(left_point.name)
-        # for i in range(1, len(traps)):
-        #     row1.append(f"T{i}")
-        #
-        #
-        # matrix.append([sum, ])
+        row1 = [None]
+        row1.extend(node_names)
+        row1.append("sum")
+        matrix[0] = row1
+
+        blank_row = [0] * len(row1)
+        for i in range(1, len(row1)):
+            matrix.append(blank_row[:])
+        for i in range(1, len(matrix) - 1):
+            matrix[i][0] = row1[i]
+        matrix[-1][0] = "sum"
+        matrix[-1][-1] = None
+
+        # Fill in table
+        for i in range(1, len(matrix[0]) - 1):
+            name = matrix[0][i]
+            if 'T' in name:
+                break
+            connections = connections_map.get(name)
+            for connection in connections:
+                if connection is not None:  # TODO remove this once trap is done
+                    j = matrix[0].index(connection)
+                    matrix[i][j] = 1
+                    matrix[j][i] = 1
+
+        # Calculate column sums
+        for j in range(1, len(matrix) - 1):
+            col_sum = 0
+            for i in range(1, len(matrix) - 1):
+                col_sum += matrix[i][j]
+            matrix[-1][j] = col_sum
+
+        # Calculate row sums and print
+        for i in range(len(matrix)):
+            if i not in (0, len(matrix) - 1):
+                matrix[i][-1] = sum(matrix[i][1:])
+            print(matrix[i])
         return matrix
+
+    def traverse_all_nodes(self, node, connections_map, names):
+        curr_node = node.data
+        if isinstance(curr_node, PointNode):
+            point_name = curr_node.point.name
+            names.append(point_name)
+            l_name = self.traverse_all_nodes(curr_node.left, connections_map, names)
+            r_name = self.traverse_all_nodes(curr_node.right, connections_map, names)
+            if point_name in connections_map:
+                connections_map.get(point_name).append(l_name)
+                connections_map.get(point_name).append(r_name)
+            else:
+                connections_map[point_name] = [l_name, r_name]
+            return point_name
+        if isinstance(curr_node, SegNode):
+            seg_name = curr_node.seg.name
+            names.append(seg_name)
+            l_name = self.traverse_all_nodes(curr_node.left, connections_map, names)
+            r_name = self.traverse_all_nodes(curr_node.right, connections_map, names)
+            if seg_name in connections_map:
+                connections_map.get(seg_name).append(l_name)
+                connections_map.get(seg_name).append(r_name)
+            else:
+                connections_map[seg_name] = [l_name, r_name]
+            return seg_name
+        if isinstance(curr_node, Leaf):
+            # trap_name = "?"
+            # names.append(trap_name)  # todo uncomment once Gregory posts the trap names
+            return  # todo, return trap name
