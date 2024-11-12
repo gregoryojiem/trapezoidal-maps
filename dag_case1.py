@@ -8,6 +8,12 @@ def handle_case1_left(left_endpoint, seg, node_leaf, degenerate_point):
     """
     trap = node_leaf.data.trap
 
+    if degenerate_point is not None:
+        left_node = degenerate_point.data.left
+    else:
+        left_node = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, left_endpoint)))
+        left_node.trap().name = trap.name
+
     up = Node(Leaf(Trapezoid(trap.top_seg, seg, left_endpoint, seg.p2)))
     down = Node(Leaf(Trapezoid(seg, trap.bot_seg, left_endpoint, seg.p2)))
 
@@ -17,11 +23,6 @@ def handle_case1_left(left_endpoint, seg, node_leaf, degenerate_point):
         down.trap().right_vert = trap.right_vert
 
     s = Node(SegNode(up, down, seg))
-
-    if degenerate_point is not None:
-        left_node = degenerate_point.data.left
-    else:
-        left_node = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, left_endpoint)))
 
     p = PointNode(left_node, s, left_endpoint)
     node_leaf.data = p
