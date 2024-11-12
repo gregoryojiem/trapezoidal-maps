@@ -53,23 +53,26 @@ class DAG:
 
         return self.find_point(curr_node.right, point)
 
-    def find_point_region(self, node, point):
+    def find_point_region(self, node, point, print_path=False):
         curr_node = node.data
+
+        if print_path:
+            print(curr_node)
 
         if isinstance(curr_node, Leaf):
             return node
 
         if isinstance(curr_node, PointNode):
             if not point.is_right_of(curr_node.point):
-                return self.find_point_region(curr_node.left, point)
+                return self.find_point_region(curr_node.left, point, print_path)
             else:
-                return self.find_point_region(curr_node.right, point)
+                return self.find_point_region(curr_node.right, point, print_path)
 
         if isinstance(curr_node, SegNode):
             if point.is_above(curr_node.seg):
-                return self.find_point_region(curr_node.left, point)
+                return self.find_point_region(curr_node.left, point, print_path)
             else:
-                return self.find_point_region(curr_node.right, point)
+                return self.find_point_region(curr_node.right, point, print_path)
 
     def find_trapezoids(self, node, seg):
         curr_node = node.data

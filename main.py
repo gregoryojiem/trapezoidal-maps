@@ -44,5 +44,9 @@ def main():
     visualizations.plot_dag(dag, bbox)
     print("There were: " + str(visualizations.trap_region_count) + " trapezoids")
 
+    input_info = input("Enter a point in the format 'x y'\n")
+    point_info = list(map(int, input_info.split(" ")))
+    dag.find_point_region(dag.head, Point(point_info[0], point_info[1], "N/A"), True)
+
 if __name__ == '__main__':
     main()

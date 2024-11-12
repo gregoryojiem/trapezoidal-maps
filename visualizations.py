@@ -45,12 +45,15 @@ def plot_dag_recursive(node, ax):
     if isinstance(curr_node, PointNode):
         point = curr_node.point
         ax.plot(point.x, point.y, color="dodgerblue", marker='o', markersize=4.5)
+        ax.text(point.x, point.y + 4, point.name, ha='center', va='center', color='black')
         plot_dag_recursive(curr_node.left, ax)
         plot_dag_recursive(curr_node.right, ax)
 
     if isinstance(curr_node, SegNode):
         seg = curr_node.seg
         ax.plot([seg.p1.x, seg.p2.x], [seg.p1.y, seg.p2.y], color="dodgerblue")
+        midpoint_x, midpoint_y = np.mean([[seg.p1.x, seg.p1.y], [seg.p2.x, seg.p2.y]], axis=0)
+        ax.text(midpoint_x, midpoint_y + 4, seg.name, ha='center', va='center', color='black')
         plot_dag_recursive(curr_node.left, ax)
         plot_dag_recursive(curr_node.right, ax)
 
@@ -69,6 +72,6 @@ def plot_dag_recursive(node, ax):
 
         polygon = np.array(vertices)
         ax.fill(polygon[:, 0], polygon[:, 1], color=color, alpha=0.5)
-        ax.text(midpoint_x, midpoint_y, f"T{trap.trap_id}", ha='center', va='center', color='black')
+        ax.text(midpoint_x, midpoint_y, f"T{trap.name}", ha='center', va='center', color='black')
         trap_region_count += 1
         regions_seen.append((midpoint_x, midpoint_y))

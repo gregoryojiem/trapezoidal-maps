@@ -54,7 +54,7 @@ class Point:
             return self.x == other.x and self.y == other.y
 
     def __str__(self):
-        return f"({self.x}, {self.y})"
+        return self.name + f"({self.x}, {self.y})"
 
 
 class Segment:
@@ -74,7 +74,7 @@ class Segment:
         return y
 
     def __str__(self):
-        return f"{self.p1}-{self.p2}"
+        return self.name + f" {self.p1}-{self.p2}"
 
 
 id_counter = 1
@@ -97,7 +97,7 @@ class Trapezoid:
         self.bot_seg = bot_seg
         self.left_vert = left_vert
         self.right_vert = right_vert
-        self.trap_id = id_counter
+        self.name = id_counter
         id_counter += 1
 
     def get_vertices(self):
@@ -124,7 +124,7 @@ class Trapezoid:
         return vertices
 
     def __str__(self):
-        return "T" + str(self.trap_id)
+        return "T" + str(self.name)
 
 
 class TrapezoidalMap:
