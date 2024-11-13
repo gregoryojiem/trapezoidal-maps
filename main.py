@@ -7,8 +7,8 @@ Holden Lalumiere, hll7371
 
 import visualizations
 from sys import argv
-from geometric_structures import Segment, Point, Trapezoid
-from rand_incr_alg import randomized_incremental_algorithm
+from data_structures.geometric_structures import Segment, Point, Trapezoid
+from dag.dir_acyc_graph import DAG
 
 
 def read_input(file_path):
@@ -71,7 +71,7 @@ def main():
     """
     filename = argv[1]
     line_segments, bbox = read_input(filename)
-    dag = randomized_incremental_algorithm(line_segments, bbox)
+    dag = DAG(line_segments, bbox)
     matrix = dag.create_output_matrix()
     create_csv(matrix, filename.split(".")[0])
     visualizations.regions_seen = []

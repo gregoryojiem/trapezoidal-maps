@@ -1,15 +1,26 @@
-from geometric_structures import Point
-from dag_structures import Node, PointNode, SegNode, Leaf
+import visualizations
+import random
+from data_structures.dag_structures import Node, PointNode, SegNode, Leaf
 from dag_case1 import handle_case1_left, handle_case1_right
 from dag_case2 import handle_case2
 from dag_case3 import handle_case3
-import visualizations
-
 
 class DAG:
-    def __init__(self, bounding_trapezoid):
+    def __init__(self, bounding_trapezoid, segments):
         self.head = Node(Leaf(bounding_trapezoid))
-        self.bbox = bounding_trapezoid
+        self.randomized_incremental_algorithm(segments)
+
+    def randomized_incremental_algorithm(self, segments):
+        """
+        Loops through all line segments in a randomized order and calls the DAG to update itself
+        :param trap_map: TrapezoidalMap containing all important test_data
+        :returns: Directed Acyclic Graph
+        """
+        # TODO remove seeding
+        random.Random(4).shuffle(segments)
+        for _ in range(0, len(segments)):
+            segment = segments.pop(0)
+            self.add_new_segment(segment)
 
     def add_new_segment(self, seg):
         print("Adding new segment: " + str(seg))

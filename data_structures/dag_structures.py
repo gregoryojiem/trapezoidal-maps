@@ -1,7 +1,7 @@
 class Node:
     """
     Stores other node types so parent nodes do not have to update who their children are,
-    instead update the child by replacing its data
+    instead update the child by replacing its test_data
     """
     def __init__(self, data):
         """

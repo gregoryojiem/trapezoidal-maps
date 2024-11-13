@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from dag_structures import Node, PointNode, SegNode, Leaf
+from data_structures.dag_structures import PointNode, SegNode, Leaf
 import numpy as np
 
 
