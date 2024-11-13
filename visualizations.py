@@ -83,3 +83,5 @@ def debug_print(trap, vertices, color):
     print(f"Drawing trapezoid: {trap}")
     print(f"Color: {int(color[0] * 255), int(color[1] * 255), int(color[2] * 255)}")
     print(f"vertices: {vertices}\n")
+    print(f"There were: {trapezoid_count} trapezoids")
+

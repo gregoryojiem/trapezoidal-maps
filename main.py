@@ -76,11 +76,26 @@ def main():
 
     # Visualization code
     visualizations.plot_dag(dag, bbox, True)
-    # print("There were: " + str(visualizations.trap_region_count) + " trapezoids")
 
     # Handle a planar point location query
-    input_info = input("Enter a point in the format 'x y'\n")
-    point_info = list(map(int, input_info.split(" ")))
+    while True:
+        broken = False
+        input_data = input("Enter a point in the format 'x y'\n")
+        input_list = input_data.split(" ")
+        if len(input_list) != 2:
+            print("Input not in 'x y' format")
+            continue
+        for inp in input_list:
+            if not ((inp.startswith('-') and inp[1:].isdigit()) or inp.isdigit()):
+                print("Non integer input")
+                broken = True
+                break
+        if broken:
+            continue
+
+        point_info = list(map(int, input_list))
+        break
+    print("Traversed Nodes:")
     dag.find_point_region(dag.head, Point(point_info[0], point_info[1], "N/A"), True)
 
 
