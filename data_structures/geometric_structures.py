@@ -41,7 +41,8 @@ class Point:
             return self.x == other.x and self.y == other.y
 
     def __str__(self):
-        return self.name + f"({self.x}, {self.y})"
+        return self.name
+        # return f"{self.name} ({self.x}, {self.y})"  # Debug string
 
 
 class Segment:
@@ -66,20 +67,21 @@ class Segment:
         """
         return self.get_slope() * (x - self.p1.x) + self.p1.y  # point-slope form
 
-    def is_above(self, otherSegment):
+    def is_above(self, other_segment):
         """
         Used to check if one segment is above another by comparing an
         overlapping region. The segments must overlap to some degree
-        :param otherSegment: Other segment to compare
+        :param other_segment: Other segment to compare
         :returns: True if this point is above the other, False otherwise
         """
-        leftmost_x = max(self.p1.x, otherSegment.p1.x)
-        rightmost_x = min(self.p2.x, otherSegment.p2.x)
+        leftmost_x = max(self.p1.x, other_segment.p1.x)
+        rightmost_x = min(self.p2.x, other_segment.p2.x)
         x = (leftmost_x + rightmost_x) / 2
-        return self.get_y_at_x(x) > otherSegment.get_y_at_x(x)
+        return self.get_y_at_x(x) > other_segment.get_y_at_x(x)
 
     def __str__(self):
-        return self.name + f" {self.p1}-{self.p2}"
+        return self.name
+        # return f"{self.name} {self.p1}-{self.p2}"  # Debug string
 
 
 class Trapezoid:
