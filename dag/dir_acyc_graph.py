@@ -1,7 +1,7 @@
 import visualizations
 import random
 
-from data_structures.dag_structures import Node, PointNode, SegNode, Leaf
+from data_structures.dag_structures import Node, PointNode, SegmentNode, LeafNode
 from dag.case1 import handle_case1_left, handle_case1_right
 from dag.case2 import handle_case2
 from dag.case3 import handle_case3
@@ -9,7 +9,7 @@ from dag.case3 import handle_case3
 
 class DAG:
     def __init__(self, segments, bounding_trapezoid):
-        self.head = Node(Leaf(bounding_trapezoid))
+        self.head = Node(LeafNode(bounding_trapezoid))
         self.bbox = bounding_trapezoid
         self.randomized_incremental_algorithm(segments)
 
@@ -52,7 +52,7 @@ class DAG:
     def find_point(self, node, point):
         curr_node = node.data
 
-        if isinstance(curr_node, Leaf):
+        if isinstance(curr_node, LeafNode):
             return None
 
         if isinstance(curr_node, PointNode) and curr_node.point.x == point.x and curr_node.point.y == point.y:
@@ -70,7 +70,7 @@ class DAG:
         if print_path:
             print(curr_node)
 
-        if isinstance(curr_node, Leaf):
+        if isinstance(curr_node, LeafNode):
             return node
 
         if isinstance(curr_node, PointNode):
@@ -79,7 +79,7 @@ class DAG:
             else:
                 return self.find_point_region(curr_node.right, point, print_path)
 
-        if isinstance(curr_node, SegNode):
+        if isinstance(curr_node, SegmentNode):
             if point.is_above(curr_node.seg):
                 return self.find_point_region(curr_node.left, point, print_path)
             else:
@@ -88,7 +88,7 @@ class DAG:
     def find_trapezoids(self, node, seg):
         curr_node = node.data
 
-        if isinstance(curr_node, Leaf):
+        if isinstance(curr_node, LeafNode):
             return {node}
 
         if isinstance(curr_node, PointNode):
@@ -99,7 +99,7 @@ class DAG:
             else:  # the point is in between the segment endpoints
                 return self.find_trapezoids(curr_node.left, seg).union(self.find_trapezoids(curr_node.right, seg))
 
-        if isinstance(curr_node, SegNode):
+        if isinstance(curr_node, SegmentNode):
             seg_above = seg.is_above(curr_node.seg)
 
             if seg.p2 == curr_node.seg.p2 and seg_above:
@@ -167,7 +167,7 @@ class DAG:
             else:
                 connections_map[point_name] = [l_name, r_name]
             return point_name
-        if isinstance(curr_node, SegNode):
+        if isinstance(curr_node, SegmentNode):
             seg_name = curr_node.seg.name
             names.append(seg_name)
             l_name = self.traverse_all_nodes(curr_node.left, connections_map, names)
@@ -178,7 +178,7 @@ class DAG:
             else:
                 connections_map[seg_name] = [l_name, r_name]
             return seg_name
-        if isinstance(curr_node, Leaf):
+        if isinstance(curr_node, LeafNode):
             trap_name = curr_node.trap.name
             names.append(trap_name)
             return trap_name

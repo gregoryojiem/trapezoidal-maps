@@ -1,4 +1,4 @@
-from data_structures.dag_structures import Node, SegNode, Leaf
+from data_structures.dag_structures import Node, SegmentNode, LeafNode
 from data_structures.geometric_structures import Trapezoid
 
 
@@ -19,15 +19,15 @@ def handle_case3(seg, node_leaf, past_traps):
         if side_to_trim:
             up.data.trap.right_vert = right_bound
     else:
-        up = Node(Leaf(Trapezoid(trap.top_seg, seg, trap.left_vert, trap.right_vert)))
+        up = Node(LeafNode(Trapezoid(trap.top_seg, seg, trap.left_vert, trap.right_vert)))
 
     if past_traps is not None and past_traps[1].data.trap.bot_seg == trap.bot_seg:
         down = past_traps[1]
         if not side_to_trim:
             down.data.trap.right_vert = right_bound
     else:
-        down = Node(Leaf(Trapezoid(seg, trap.bot_seg, trap.left_vert, trap.right_vert)))
+        down = Node(LeafNode(Trapezoid(seg, trap.bot_seg, trap.left_vert, trap.right_vert)))
 
-    s = SegNode(up, down, seg)
+    s = SegmentNode(up, down, seg)
     node_leaf.data = s
     return [up, down]

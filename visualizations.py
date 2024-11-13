@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from data_structures.dag_structures import PointNode, SegNode, Leaf
+from data_structures.dag_structures import PointNode, SegmentNode, LeafNode
 import numpy as np
 
 trapezoid_count = 0
@@ -68,10 +68,10 @@ def plot_dag_recursive(node, ax):
     if isinstance(curr_node, PointNode):
         plot_point(curr_node.point, ax)
 
-    elif isinstance(curr_node, SegNode):
+    elif isinstance(curr_node, SegmentNode):
         plot_segment(curr_node.seg, ax)
 
-    elif isinstance(curr_node, Leaf):
+    elif isinstance(curr_node, LeafNode):
         plot_trapezoid(curr_node.trap, ax)
         return
 

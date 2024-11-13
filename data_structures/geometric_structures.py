@@ -1,54 +1,40 @@
 class Point:
     """
-    Class for a 2D point
-    Stores the x and y coordinate
+    Represents a 2D point, with various functions for common operations
     """
+
     def __init__(self, x, y, name):
-        """
-        Initialize a point with x and y coordinates
-        :param x: x coordinate
-        :param y: y coordinate
-        """
         self.x = x
         self.y = y
-        self.name = name
+        self.name = name  # Used to identify the point based on when it was read in, e.g. P1, P2, Q1, etc.
         self.segment = None
+
+    def set_segment(self, segment):
+        self.segment = segment
 
     def is_right_of(self, point):
         """
-        Check if this point's x coordinate is greater than the x coordinate of another point
-        :param point: Point to check against
-        :returns: True if this point is to the right of the other point, False otherwise
+        Checks whether this point is to the right of another point
+        :param point: point to compare
+        :returns: True if this point is to the right of the other, False otherwise
         """
         return self.x > point.x
 
-    def is_above(self, obj): #todo refactor
+    def is_above(self, obj):
         """
-        Checks if this Point is above the given Point or Segment
-        By checking the y coordinate, or the cross product
-        :param obj: A Point or a Segment
-        :returns: For a Point, True, if this point is above the point, False otherwise
-        For a Segment, True if this point  is above the segment, False otherwise
+        Checks whether this point is above a segment or another point
+        For a point, only y values are compared
+        For a segment, the line equation is used to determine above-ness
+        :param obj: An instance of Point or Segment
+        :returns: True if above, False otherwise
         """
         if isinstance(obj, Point):
             return self.y > obj.y
 
-        seg = obj
-        above_seg_p1 = self.is_above(seg.p1)
-        above_seg_p2 = self.is_above(seg.p2)
+        if not isinstance(obj, Segment):
+            raise TypeError("Can only compare points to points or segments")
 
-        if above_seg_p1 and above_seg_p2:
-            return True
-
-        if not above_seg_p2 and not above_seg_p2:
-            return False
-
-        # TODO testing
-        cross_product = (seg.p2.x - seg.p1.x) * (self.y - seg.p1.y) - (seg.p2.y - seg.p1.y) * (self.x - seg.p1.x)
-        return cross_product > 0
-
-    def set_segment(self, segment):
-        self.segment = segment
+        return self.y > obj.get_y_at_x(self.x)
 
     def __eq__(self, other):
         if isinstance(other, Point):
@@ -60,24 +46,37 @@ class Point:
 
 class Segment:
     """
-    Todo
+    Represents a line segment, with various functions for common operations
+    p1 is guaranteed to be the leftmost point
     """
+
     def __init__(self, p1, p2, name):
         self.p1 = p1
         self.p2 = p2
-        self.name = name
+        self.name = name  # Used to identify the segment based on when it was read in, e.g. S1, S2
+
+    def get_slope(self):
+        return (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x)
 
     def get_y_at_x(self, x):
-        """Returns the y-coordinate of the line segment at the given x-value."""
-        slope = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x)  # Calculate slope
-        y = slope * (x - self.p1.x) + self.p1.y  # Calculate y-intercept
-        return y
+        """
+        Returns the y-coordinate of the line segment at the given x-value
+        :param x: The x value to use
+        :returns: y-coordinate at x
+        """
+        return self.get_slope() * (x - self.p1.x) + self.p1.y  # point-slope form
 
-    def is_above(self, otherSeg):
-        leftmost_x = max(self.p1.x, otherSeg.p1.x)
-        rightmost_x = min(self.p2.x, otherSeg.p2.x)
+    def is_above(self, otherSegment):
+        """
+        Used to check if one segment is above another by comparing an
+        overlapping region. The segments must overlap to some degree
+        :param otherSegment: Other segment to compare
+        :returns: True if this point is above the other, False otherwise
+        """
+        leftmost_x = max(self.p1.x, otherSegment.p1.x)
+        rightmost_x = min(self.p2.x, otherSegment.p2.x)
         x = (leftmost_x + rightmost_x) / 2
-        return self.get_y_at_x(x) > otherSeg.get_y_at_x(x)
+        return self.get_y_at_x(x) > otherSegment.get_y_at_x(x)
 
     def __str__(self):
         return self.name + f" {self.p1}-{self.p2}"
@@ -85,19 +84,12 @@ class Segment:
 
 class Trapezoid:
     """
-    Trapezoid defined by a top and bottom segment and a left and right vertex
+    Represents a trapezoid, defined by a top/bottom segment and left/right vertex
     """
 
-    id_counter = 0
+    id_counter = 0  # Used to name trapezoids in the order they're created
 
     def __init__(self, top_seg, bot_seg, left_vert, right_vert):
-        """
-        Creates a trapezoid
-        :param top_seg: Top line Segment
-        :param bot_seg: Bottom line Segment
-        :param left_vert: Left vertex
-        :param right_vert: Right vertex
-        """
         self.top_seg = top_seg
         self.bot_seg = bot_seg
         self.left_vert = left_vert
@@ -106,6 +98,10 @@ class Trapezoid:
         Trapezoid.id_counter += 1
 
     def get_vertices(self):
+        """
+        Returns an array of vertices that represent the trapezoid
+        Used mainly for matplotlib visualization
+        """
         leftmost_x = self.left_vert.x
         rightmost_x = self.right_vert.x
         top_left_y = self.top_seg.get_y_at_x(leftmost_x)
@@ -120,6 +116,7 @@ class Trapezoid:
             (leftmost_x, top_left_y),
         ]
 
+        # Handle degenerate case
         if vertices[1] == vertices[2]:
             return [vertices[0], vertices[1], vertices[3]]
 
