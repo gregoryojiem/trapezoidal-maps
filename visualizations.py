@@ -3,15 +3,16 @@ from data_structures.dag_structures import PointNode, SegNode, Leaf
 import numpy as np
 
 
-def plot_segments(segments, bounds):
+def plot_line_segments(segments, bounds):
     fig, ax = plt.subplots()
 
     for i, segment in enumerate(segments):
         ax.plot([segment.p1.x, segment.p2.x], [segment.p1.y, segment.p2.y], color="dodgerblue")
         ax.plot([segment.p1.x, segment.p2.x], [segment.p1.y, segment.p2.y],
                 color="dodgerblue", marker='o', markersize=4.5)
+        hover_distance = 4
         mid_p_x = (segment.p1.x + segment.p2.x) / 2
-        mid_p_y = ((segment.p1.y + segment.p2.y) / 2) + 4
+        mid_p_y = ((segment.p1.y + segment.p2.y) / 2) + hover_distance
         ax.text(mid_p_x, mid_p_y, f"S{i + 1}", color="dodgerblue")
 
     ax.set_xlim(bounds[0], bounds[2])
@@ -22,16 +23,24 @@ def plot_segments(segments, bounds):
     plt.show()
 
 
-def plot_dag(dag, bounding_trapezoid):
-    fig, ax = plt.subplots()
-    plot_dag_recursive(dag.head, ax)
+def plot_dag(dag, bounding_trapezoid, reset):
+    global regions_seen
+    global trap_region_count
+
+    if reset:
+        regions_seen = []
+        trap_region_count = 0
+
     bot_seg = bounding_trapezoid.bot_seg
     top_seg = bounding_trapezoid.top_seg
+
+    fig, ax = plt.subplots()
     ax.set_xlim(bot_seg.p1.x, bot_seg.p2.x)
     ax.set_ylim(bot_seg.p1.y, top_seg.p2.y)
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_title("DAG Data")
+    plot_dag_recursive(dag.head, ax)
     plt.show()
 
 

@@ -10,21 +10,6 @@ class Node:
         """
         self.data = data
 
-    def trap(self):
-        return self.data.trap
-
-    def top_seg(self):
-        return self.data.trap.top_seg
-
-    def bot_seg(self):
-        return self.data.trap.bot_seg
-
-    def left_vert(self):
-        return self.data.trap.left_vert
-
-    def right_vert(self):
-        return self.data.trap.right_vert
-
     def __str__(self):
         return str(self.data)
 

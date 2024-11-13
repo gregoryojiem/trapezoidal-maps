@@ -43,7 +43,6 @@ def read_input(file_path):
         top_seg = Segment(Point(bbox_p1.x, bbox_p2.y, "B3"), bbox_p2, "STop")
         bot_seg = Segment(bbox_p1, Point(bbox_p2.x, bbox_p1.y, "B4"), "SBot")
         bbox = Trapezoid(top_seg, bot_seg, bbox_p1, bbox_p2)
-
         return segments, bbox
 
 
@@ -65,20 +64,21 @@ def create_csv(matrix, filename):
 
 def main():
     """
-    Runs all parts of the program.
-    Reads the input file, creates the initial map, the DAG, creates the adjacency matrix,
-    saves the matrix, visualizes the Trapezoids, and asks for input to test what Trapezoid a point is in.
+    Driver program that initializes the trapezoidal map and prints relevant information
     """
     filename = argv[1]
     line_segments, bbox = read_input(filename)
     dag = DAG(line_segments, bbox)
+
+    # Print the output matrix
     matrix = dag.create_output_matrix()
     create_csv(matrix, filename.split(".")[0])
-    visualizations.regions_seen = []
-    visualizations.trap_region_count = 0
-    visualizations.plot_dag(dag, bbox)
-    print("There were: " + str(visualizations.trap_region_count) + " trapezoids")
 
+    # Visualization code
+    visualizations.plot_dag(dag, bbox, True)
+    # print("There were: " + str(visualizations.trap_region_count) + " trapezoids")
+
+    # Handle a planar point location query
     input_info = input("Enter a point in the format 'x y'\n")
     point_info = list(map(int, input_info.split(" ")))
     dag.find_point_region(dag.head, Point(point_info[0], point_info[1], "N/A"), True)

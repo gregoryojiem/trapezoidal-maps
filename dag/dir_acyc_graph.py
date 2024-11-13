@@ -1,21 +1,19 @@
 import visualizations
 import random
+
 from data_structures.dag_structures import Node, PointNode, SegNode, Leaf
-from dag_case1 import handle_case1_left, handle_case1_right
-from dag_case2 import handle_case2
-from dag_case3 import handle_case3
+from dag.case1 import handle_case1_left, handle_case1_right
+from dag.case2 import handle_case2
+from dag.case3 import handle_case3
+
 
 class DAG:
-    def __init__(self, bounding_trapezoid, segments):
+    def __init__(self, segments, bounding_trapezoid):
         self.head = Node(Leaf(bounding_trapezoid))
+        self.bbox = bounding_trapezoid
         self.randomized_incremental_algorithm(segments)
 
     def randomized_incremental_algorithm(self, segments):
-        """
-        Loops through all line segments in a randomized order and calls the DAG to update itself
-        :param trap_map: TrapezoidalMap containing all important test_data
-        :returns: Directed Acyclic Graph
-        """
         # TODO remove seeding
         random.Random(4).shuffle(segments)
         for _ in range(0, len(segments)):
@@ -28,11 +26,11 @@ class DAG:
 
         visualizations.regions_seen = []
         if len(affected_trapezoids) == 1:
-            visualizations.plot_dag(self, self.bbox)
+            visualizations.plot_dag(self, self.bbox, False)
             handle_case2(seg, affected_trapezoids[0])
             return
 
-        visualizations.plot_dag(self, self.bbox)
+        visualizations.plot_dag(self, self.bbox, False)
 
         left_point_region = self.find_point_region(self.head, seg.p1)
         right_point_region = self.find_point_region(self.head, seg.p2)
@@ -40,16 +38,16 @@ class DAG:
         affected_trapezoids.remove(right_point_region)
         degenerate_check_left = self.find_point(self.head, seg.p1)
         resultant_traps = handle_case1_left(seg.p1, seg, left_point_region, degenerate_check_left)
-        visualizations.plot_dag(self, self.bbox)
+        visualizations.plot_dag(self, self.bbox, False)
 
         affected_trapezoids.sort(key=lambda x: x.data.trap.left_vert.x)
         for trapezoid in affected_trapezoids:
             resultant_traps = handle_case3(seg, trapezoid, resultant_traps)
-            visualizations.plot_dag(self, self.bbox)
+            visualizations.plot_dag(self, self.bbox, False)
 
         degenerate_check_right = self.find_point(self.head, seg.p2)
         handle_case1_right(seg.p2, seg, right_point_region, resultant_traps, degenerate_check_right)
-        visualizations.plot_dag(self, self.bbox)
+        visualizations.plot_dag(self, self.bbox, False)
 
     def find_point(self, node, point):
         curr_node = node.data
