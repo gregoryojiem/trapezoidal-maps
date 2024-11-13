@@ -8,14 +8,23 @@ from dag.case3 import handle_case3
 
 
 class DAG:
+    """
+
+    """
     def __init__(self, segments, bounding_trapezoid):
         self.head = Node(LeafNode(bounding_trapezoid))
         self.bbox = bounding_trapezoid
         self.randomized_incremental_algorithm(segments)
 
     def randomized_incremental_algorithm(self, segments):
-        # TODO remove seeding
-        random.Random(4).shuffle(segments)
+        """
+        Driver for the randomized incremental algorithm. Takes in a list of segments
+        and calls add_new_segment() to process them
+
+        :param segments: List of segments to add to the DAG
+        """
+        # random.Random(51).shuffle(segments)  # randomize step can be skipped
+
         for _ in range(0, len(segments)):
             segment = segments.pop(0)
             self.add_new_segment(segment)
@@ -68,7 +77,7 @@ class DAG:
         curr_node = node.data
 
         if print_path:
-            print(curr_node)
+            print(curr_node, end=" ")
 
         if isinstance(curr_node, LeafNode):
             return node
