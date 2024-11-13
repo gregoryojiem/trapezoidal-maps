@@ -16,11 +16,11 @@ class DAG:
 
         visualizations.regions_seen = []
         if len(affected_trapezoids) == 1:
-            visualizations.plot_dag(self, bbox)
+            #visualizations.plot_dag(self, bbox)
             handle_case2(seg, affected_trapezoids[0])
             return
 
-        visualizations.plot_dag(self, bbox)
+        #visualizations.plot_dag(self, bbox)
 
         left_point_region = self.find_point_region(self.head, seg.p1)
         right_point_region = self.find_point_region(self.head, seg.p2)
@@ -28,11 +28,12 @@ class DAG:
         affected_trapezoids.remove(right_point_region)
         degenerate_check_left = self.find_point(self.head, seg.p1)
         resultant_traps = handle_case1_left(seg.p1, seg, left_point_region, degenerate_check_left)
-        visualizations.plot_dag(self, bbox)
+        #visualizations.plot_dag(self, bbox)
 
+        affected_trapezoids.sort(key=lambda x: x.data.trap.left_vert.x)
         for trapezoid in affected_trapezoids:
             resultant_traps = handle_case3(seg, trapezoid, resultant_traps)
-            visualizations.plot_dag(self, bbox)
+            #visualizations.plot_dag(self, bbox)
 
         degenerate_check_right = self.find_point(self.head, seg.p2)
         handle_case1_right(seg.p2, seg, right_point_region, resultant_traps, degenerate_check_right)
@@ -86,16 +87,14 @@ class DAG:
             elif seg.p1.is_right_of(curr_node.point):  # segment is fully right of the point
                 return self.find_trapezoids(curr_node.right, seg)
             else:  # the point is in between the segment endpoints
-                return self.find_trapezoids(curr_node.right, seg).union(self.find_trapezoids(curr_node.left, seg))
+                return self.find_trapezoids(curr_node.left, seg).union(self.find_trapezoids(curr_node.right, seg))
 
         if isinstance(curr_node, SegNode):
-            left_x_bound = curr_node.seg.p1.x
-            right_x_bound = curr_node.seg.p2.x
-            point_to_compare = seg.p1 if seg.p1.within(left_x_bound, right_x_bound) else seg.p2
+            seg_above = seg.is_above(curr_node.seg)
 
-            if seg.p2 == curr_node.seg.p2 and seg.p1.is_above(curr_node.seg.p1):
-                return self.find_trapezoids(curr_node.right, seg).union(self.find_trapezoids(curr_node.left, seg))
-            if point_to_compare.is_above(curr_node.seg):
+            if seg.p2 == curr_node.seg.p2 and seg_above:
+                return self.find_trapezoids(curr_node.left, seg).union(self.find_trapezoids(curr_node.right, seg))
+            if seg_above:
                 return self.find_trapezoids(curr_node.left, seg)
             else:
                 return self.find_trapezoids(curr_node.right, seg)

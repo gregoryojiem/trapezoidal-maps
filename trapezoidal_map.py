@@ -46,9 +46,6 @@ class Point:
         cross_product = (seg.p2.x - seg.p1.x) * (self.y - seg.p1.y) - (seg.p2.y - seg.p1.y) * (self.x - seg.p1.x)
         return cross_product > 0
 
-    def within(self, x1, x2):  # TODO re-examine for degenerate case
-        return x1 < self.x < x2
-
     def __eq__(self, other):
         if isinstance(other, Point):
             return self.x == other.x and self.y == other.y
@@ -72,6 +69,12 @@ class Segment:
         slope = (self.p2.y - self.p1.y) / (self.p2.x - self.p1.x)  # Calculate slope
         y = slope * (x - self.p1.x) + self.p1.y  # Calculate y-intercept
         return y
+
+    def is_above(self, otherSeg):
+        leftmost_x = max(self.p1.x, otherSeg.p1.x)
+        rightmost_x = min(self.p2.x, otherSeg.p2.x)
+        x = (leftmost_x + rightmost_x) / 2
+        return self.get_y_at_x(x) > otherSeg.get_y_at_x(x)
 
     def __str__(self):
         return self.name + f" {self.p1}-{self.p2}"
