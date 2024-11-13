@@ -6,6 +6,11 @@ from dag_case3 import handle_case3
 import visualizations
 
 
+def debug_print_matrix(matrix):
+    for row in matrix:
+        print(row)
+
+
 class DAG:
     def __init__(self, bounding_trapezoid):
         self.head = Node(Leaf(bounding_trapezoid))
@@ -141,7 +146,7 @@ class DAG:
         for i in range(len(matrix)):
             if i not in (0, len(matrix) - 1):
                 matrix[i][-1] = sum(matrix[i][1:])
-            print(matrix[i])
+        # debug_print_matrix(matrix)
         return matrix
 
     def traverse_all_nodes(self, node, connections_map, names):
