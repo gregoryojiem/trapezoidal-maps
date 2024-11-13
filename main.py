@@ -34,11 +34,29 @@ def read_input(file_path):
         return segments, bbox
 
 
+def create_csv(matrix, filename):
+    """
+    Creates a csv file with the matrix given under "filenameOut.csv"
+    :param matrix: Matrix to save
+    :param filename: File name to save to
+    """
+    f = open(f"{filename}Out.csv", "w")
+    for row in matrix:
+        for j in range(len(row)):
+            entry = row[j]
+            if entry is None:
+                entry = ""
+            f.write(f"{entry},")
+        f.write("\n")
+
+
 def main():
-    line_segments, bbox = read_input("data/gro3228.txt")
+    filename = "data/gro3228"
+    line_segments, bbox = read_input(f"{filename}.txt")
     trapezoidal_map = TrapezoidalMap(line_segments, bbox)
     dag = randomized_incremental_algorithm(trapezoidal_map, bbox)
-    dag.create_output_matrix()
+    matrix = dag.create_output_matrix()
+    create_csv(matrix, filename)
     visualizations.regions_seen = []
     visualizations.trap_region_count = 0
     visualizations.plot_dag(dag, bbox)
