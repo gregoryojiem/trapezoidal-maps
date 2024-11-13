@@ -97,7 +97,7 @@ class Trapezoid:
         self.bot_seg = bot_seg
         self.left_vert = left_vert
         self.right_vert = right_vert
-        self.name = id_counter
+        self.name = f"T{id_counter}"
         id_counter += 1
 
     def get_vertices(self):
@@ -124,7 +124,7 @@ class Trapezoid:
         return vertices
 
     def __str__(self):
-        return "T" + str(self.name)
+        return self.name
 
 
 class TrapezoidalMap:

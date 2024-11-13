@@ -29,7 +29,6 @@ class Node:
         return str(self.data)
 
 
-
 class Internal:
     """
     Abstract class Internal Node for the DAG
@@ -93,6 +92,7 @@ class SegNode(Internal):
 
     def __str__(self):
         return str(self.seg)
+
 
 class Leaf:
     """

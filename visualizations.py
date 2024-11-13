@@ -72,6 +72,6 @@ def plot_dag_recursive(node, ax):
 
         polygon = np.array(vertices)
         ax.fill(polygon[:, 0], polygon[:, 1], color=color, alpha=0.5)
-        ax.text(midpoint_x, midpoint_y, f"T{trap.name}", ha='center', va='center', color='black')
+        ax.text(midpoint_x, midpoint_y, trap.name, ha='center', va='center', color='black')
         trap_region_count += 1
         regions_seen.append((midpoint_x, midpoint_y))
