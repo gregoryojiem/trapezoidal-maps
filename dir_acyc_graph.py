@@ -103,9 +103,6 @@ class DAG:
         node_names = []
         connections_map = {}
         self.traverse_all_nodes(self.head, connections_map, node_names)
-        # todo sort node_names by P, Q, T
-        trapezoids = ["T8", "T7", "T6", "T9", "T3", "T10", "T4"]  # todo remove this
-        node_names.extend(trapezoids)  # todo delete
         node_names = list(set(node_names))
         node_names = sorted(node_names, key=lambda x: (x[0], int(x[1:])))
 
@@ -130,10 +127,8 @@ class DAG:
                 break
             connections = connections_map.get(name)
             for connection in connections:
-                if connection is not None:  # TODO remove this once trap is done
-                    j = matrix[0].index(connection)
-                    matrix[i][j] = 1
-                    matrix[j][i] = 1
+                j = matrix[0].index(connection)
+                matrix[j][i] = 1
 
         # Calculate column sums
         for j in range(1, len(matrix) - 1):
@@ -174,6 +169,6 @@ class DAG:
                 connections_map[seg_name] = [l_name, r_name]
             return seg_name
         if isinstance(curr_node, Leaf):
-            # trap_name = "?"
-            # names.append(trap_name)  # todo uncomment once Gregory posts the trap names
-            return  # todo, return trap name
+            trap_name = curr_node.trap.name
+            names.append(trap_name)
+            return trap_name

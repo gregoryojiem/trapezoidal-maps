@@ -5,8 +5,8 @@ Gregory Ojiem, gro3228
 Holden Lalumiere, hll7371
 """
 
-import matplotlib.pyplot as plt
 import visualizations
+from sys import argv
 from trapezoidal_map import Segment, Point, TrapezoidalMap
 from rand_incr_alg import randomized_incremental_algorithm
 
@@ -34,11 +34,34 @@ def read_input(file_path):
         return segments, bbox
 
 
+def create_csv(matrix, filename):
+    """
+    Creates a csv file with the matrix given under "filenameOut.csv"
+    :param matrix: Matrix to save
+    :param filename: File name to save to
+    """
+    f = open(f"{filename}Out.csv", "w")
+    for row in matrix:
+        for j in range(len(row)):
+            entry = row[j]
+            if entry is None:
+                entry = ""
+            f.write(f"{entry},")
+        f.write("\n")
+
+
 def main():
-    line_segments, bbox = read_input("data/hll7371.txt")
+    """
+    Runs all parts of the program.
+    Reads the input file, creates the initial map, the DAG, creates the adjacency matrix,
+    saves the matrix, visualizes the Trapezoids, and asks for input to test what Trapezoid a point is in.
+    """
+    filename = argv[1]
+    line_segments, bbox = read_input(filename)
     trapezoidal_map = TrapezoidalMap(line_segments, bbox)
     dag = randomized_incremental_algorithm(trapezoidal_map, bbox)
-    dag.create_output_matrix()
+    matrix = dag.create_output_matrix()
+    create_csv(matrix, filename.split(".")[0])
     visualizations.regions_seen = []
     visualizations.trap_region_count = 0
     visualizations.plot_dag(dag, bbox)

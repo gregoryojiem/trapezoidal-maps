@@ -64,14 +64,17 @@ def plot_dag_recursive(node, ax):
         if (midpoint_x, midpoint_y) in regions_seen:
             return
 
-        print("Drawing trapezoid: " + str(trap))
         color = colors(trap_region_count % 10)
-        print(f"Color: {int(color[0] * 255), int(color[1] * 255), int(color[2] * 255)}")
-        print("vertices: " + str(vertices))
-        print()
+        # debug_print(trap, vertices, color)
 
         polygon = np.array(vertices)
         ax.fill(polygon[:, 0], polygon[:, 1], color=color, alpha=0.5)
-        ax.text(midpoint_x, midpoint_y, f"T{trap.name}", ha='center', va='center', color='black')
+        ax.text(midpoint_x, midpoint_y, trap.name, ha='center', va='center', color='black')
         trap_region_count += 1
         regions_seen.append((midpoint_x, midpoint_y))
+
+
+def debug_print(trap, vertices, color):
+    print(f"Drawing trapezoid: {trap}")
+    print(f"Color: {int(color[0] * 255), int(color[1] * 255), int(color[2] * 255)}")
+    print(f"vertices: {vertices}\n")
