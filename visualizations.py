@@ -2,34 +2,18 @@ import matplotlib.pyplot as plt
 from data_structures.dag_structures import PointNode, SegNode, Leaf
 import numpy as np
 
-
-def plot_line_segments(segments, bounds):
-    fig, ax = plt.subplots()
-
-    for i, segment in enumerate(segments):
-        ax.plot([segment.p1.x, segment.p2.x], [segment.p1.y, segment.p2.y], color="dodgerblue")
-        ax.plot([segment.p1.x, segment.p2.x], [segment.p1.y, segment.p2.y],
-                color="dodgerblue", marker='o', markersize=4.5)
-        hover_distance = 4
-        mid_p_x = (segment.p1.x + segment.p2.x) / 2
-        mid_p_y = ((segment.p1.y + segment.p2.y) / 2) + hover_distance
-        ax.text(mid_p_x, mid_p_y, f"S{i + 1}", color="dodgerblue")
-
-    ax.set_xlim(bounds[0], bounds[2])
-    ax.set_ylim(bounds[1], bounds[3])
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-    ax.set_title("Line Segments")
-    plt.show()
+trapezoid_count = 0
+trapezoids_seen = []
+colors = plt.cm.get_cmap('hsv', 10)
 
 
 def plot_dag(dag, bounding_trapezoid, reset):
-    global regions_seen
-    global trap_region_count
+    global trapezoids_seen
+    global trapezoid_count
 
     if reset:
-        regions_seen = []
-        trap_region_count = 0
+        trapezoids_seen = []
+        trapezoid_count = 0
 
     bot_seg = bounding_trapezoid.bot_seg
     top_seg = bounding_trapezoid.top_seg
@@ -44,45 +28,55 @@ def plot_dag(dag, bounding_trapezoid, reset):
     plt.show()
 
 
-trap_region_count = 0
-regions_seen = []
-colors = plt.cm.get_cmap('hsv', 10)
+def plot_point(point, ax):
+    hover_distance = 3
+    ax.plot(point.x, point.y, color="dodgerblue", marker='o', markersize=4.5)
+    ax.text(point.x, point.y + hover_distance, point.name, ha='center', va='center', color='black')
+
+
+def plot_segment(segment, ax):
+    hover_distance = 4
+    midpoint_x, midpoint_y = np.mean([[segment.p1.x, segment.p1.y], [segment.p2.x, segment.p2.y]], axis=0)
+    ax.plot([segment.p1.x, segment.p2.x], [segment.p1.y, segment.p2.y], color="dodgerblue")
+    ax.text(midpoint_x, midpoint_y + hover_distance, segment.name, ha='center', va='center', color='black')
+
+
+def plot_trapezoid(trapezoid, ax):
+    global trapezoid_count
+    global trapezoids_seen
+
+    vertices = trapezoid.get_vertices()
+    midpoint_x, midpoint_y = np.mean(vertices, axis=0)
+
+    # Used to view only new regions added (e.g. see what changed after adding a left endpoint)
+    if (midpoint_x, midpoint_y) in trapezoids_seen:
+        return
+
+    polygon = np.array(vertices)
+    trapezoid_count += 1
+    trapezoids_seen.append((midpoint_x, midpoint_y))
+    ax.fill(polygon[:, 0], polygon[:, 1], color=colors(trapezoid_count % 10), alpha=0.5)
+    ax.text(midpoint_x, midpoint_y, trapezoid.name, ha='center', va='center', color='black')
 
 
 def plot_dag_recursive(node, ax):
-    global trap_region_count
-    global regions_seen
+    """
+    A recursive plotting function to generate a visualization of the DAG
+    """
     curr_node = node.data
+
     if isinstance(curr_node, PointNode):
-        point = curr_node.point
-        ax.plot(point.x, point.y, color="dodgerblue", marker='o', markersize=4.5)
-        ax.text(point.x, point.y + 4, point.name, ha='center', va='center', color='black')
-        plot_dag_recursive(curr_node.left, ax)
-        plot_dag_recursive(curr_node.right, ax)
+        plot_point(curr_node.point, ax)
 
-    if isinstance(curr_node, SegNode):
-        seg = curr_node.seg
-        ax.plot([seg.p1.x, seg.p2.x], [seg.p1.y, seg.p2.y], color="dodgerblue")
-        midpoint_x, midpoint_y = np.mean([[seg.p1.x, seg.p1.y], [seg.p2.x, seg.p2.y]], axis=0)
-        ax.text(midpoint_x, midpoint_y + 4, seg.name, ha='center', va='center', color='black')
-        plot_dag_recursive(curr_node.left, ax)
-        plot_dag_recursive(curr_node.right, ax)
+    elif isinstance(curr_node, SegNode):
+        plot_segment(curr_node.seg, ax)
 
-    if isinstance(curr_node, Leaf):
-        trap = curr_node.trap
-        vertices = trap.get_vertices()
-        midpoint_x, midpoint_y = np.mean(vertices, axis=0)
-        if (midpoint_x, midpoint_y) in regions_seen:
-            return
+    elif isinstance(curr_node, Leaf):
+        plot_trapezoid(curr_node.trap, ax)
+        return
 
-        color = colors(trap_region_count % 10)
-        # debug_print(trap, vertices, color)
-
-        polygon = np.array(vertices)
-        ax.fill(polygon[:, 0], polygon[:, 1], color=color, alpha=0.5)
-        ax.text(midpoint_x, midpoint_y, trap.name, ha='center', va='center', color='black')
-        trap_region_count += 1
-        regions_seen.append((midpoint_x, midpoint_y))
+    plot_dag_recursive(curr_node.left, ax)
+    plot_dag_recursive(curr_node.right, ax)
 
 
 def debug_print(trap, vertices, color):

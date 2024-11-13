@@ -24,7 +24,7 @@ class DAG:
         print("Adding new segment: " + str(seg))
         affected_trapezoids = list(self.find_trapezoids(self.head, seg))
 
-        visualizations.regions_seen = []
+        visualizations.trapezoids_seen = []
         if len(affected_trapezoids) == 1:
             visualizations.plot_dag(self, self.bbox, False)
             handle_case2(seg, affected_trapezoids[0])
