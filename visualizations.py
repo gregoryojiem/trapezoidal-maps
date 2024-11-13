@@ -22,11 +22,13 @@ def plot_segments(segments, bounds):
     plt.show()
 
 
-def plot_dag(dag, bounds):
+def plot_dag(dag, bounding_trapezoid):
     fig, ax = plt.subplots()
     plot_dag_recursive(dag.head, ax)
-    ax.set_xlim(bounds[0], bounds[2])
-    ax.set_ylim(bounds[1], bounds[3])
+    bot_seg = bounding_trapezoid.bot_seg
+    top_seg = bounding_trapezoid.top_seg
+    ax.set_xlim(bot_seg.p1.x, bot_seg.p2.x)
+    ax.set_ylim(bot_seg.p1.y, top_seg.p2.y)
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_title("DAG Data")

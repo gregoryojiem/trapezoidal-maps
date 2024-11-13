@@ -1,5 +1,5 @@
 from dag_structures import Node, PointNode, SegNode, Leaf
-from trapezoidal_map import Trapezoid
+from geometric_structures import Trapezoid
 
 
 def handle_case1_left(left_endpoint, seg, node_leaf, degenerate_point):

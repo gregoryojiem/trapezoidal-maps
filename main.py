@@ -7,7 +7,7 @@ Holden Lalumiere, hll7371
 
 import visualizations
 from sys import argv
-from trapezoidal_map import Segment, Point, TrapezoidalMap
+from geometric_structures import Segment, Point, Trapezoid
 from rand_incr_alg import randomized_incremental_algorithm
 
 
@@ -38,6 +38,12 @@ def read_input(file_path):
             p1.set_segment(segment)
             p2.set_segment(segment)
 
+        bbox_p1 = Point(bbox[0], bbox[1], "B1")
+        bbox_p2 = Point(bbox[2], bbox[3], "B2")
+        top_seg = Segment(Point(bbox_p1.x, bbox_p2.y, "B3"), bbox_p2, "STop")
+        bot_seg = Segment(bbox_p1, Point(bbox_p2.x, bbox_p1.y, "B4"), "SBot")
+        bbox = Trapezoid(top_seg, bot_seg, bbox_p1, bbox_p2)
+
         return segments, bbox
 
 
@@ -65,8 +71,7 @@ def main():
     """
     filename = argv[1]
     line_segments, bbox = read_input(filename)
-    trapezoidal_map = TrapezoidalMap(line_segments, bbox)
-    dag = randomized_incremental_algorithm(trapezoidal_map, bbox)
+    dag = randomized_incremental_algorithm(line_segments, bbox)
     matrix = dag.create_output_matrix()
     create_csv(matrix, filename.split(".")[0])
     visualizations.regions_seen = []
@@ -77,6 +82,7 @@ def main():
     input_info = input("Enter a point in the format 'x y'\n")
     point_info = list(map(int, input_info.split(" ")))
     dag.find_point_region(dag.head, Point(point_info[0], point_info[1], "N/A"), True)
+
 
 if __name__ == '__main__':
     main()

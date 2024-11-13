@@ -1,5 +1,5 @@
 from dag_structures import Node, PointNode, SegNode, Leaf
-from trapezoidal_map import Trapezoid
+from geometric_structures import Trapezoid
 
 
 def handle_case3(seg, node_leaf, past_traps):

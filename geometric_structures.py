@@ -62,7 +62,6 @@ class Segment:
     """
     Todo
     """
-
     def __init__(self, p1, p2, name):
         self.p1 = p1
         self.p2 = p2
@@ -84,13 +83,13 @@ class Segment:
         return self.name + f" {self.p1}-{self.p2}"
 
 
-id_counter = 1
-
-
 class Trapezoid:
     """
     Trapezoid defined by a top and bottom segment and a left and right vertex
     """
+
+    id_counter = 0
+
     def __init__(self, top_seg, bot_seg, left_vert, right_vert):
         """
         Creates a trapezoid
@@ -99,13 +98,12 @@ class Trapezoid:
         :param left_vert: Left vertex
         :param right_vert: Right vertex
         """
-        global id_counter
         self.top_seg = top_seg
         self.bot_seg = bot_seg
         self.left_vert = left_vert
         self.right_vert = right_vert
-        self.name = f"T{id_counter}"
-        id_counter += 1
+        self.name = f"T{self.id_counter}"
+        Trapezoid.id_counter += 1
 
     def get_vertices(self):
         leftmost_x = self.left_vert.x
@@ -132,24 +130,3 @@ class Trapezoid:
 
     def __str__(self):
         return self.name
-
-
-class TrapezoidalMap:
-    """
-    Holds information about the bounding box, the line segments, and the DAG
-    """
-    def __init__(self, line_segments, bbox):
-        """
-        Contains important information to the algorithm
-        :param line_segments: List of line segments
-        :param bbox: Trapezoid of the bounding box for the line segments
-        """
-        bbox_p1 = Point(bbox[0], bbox[1], "B1")
-        bbox_p2 = Point(bbox[2], bbox[3], "B2")
-        top_seg = Segment(Point(bbox_p1.x, bbox_p2.y, "B3"), bbox_p2, "STop")
-        bot_seg = Segment(bbox_p1, Point(bbox_p2.x, bbox_p1.y, "B4"), "SBot")
-        self.bbox = Trapezoid(top_seg, bot_seg, bbox_p1, bbox_p2)
-        self.line_segments = line_segments
-
-    def __str__(self):
-        return "[" + "\n".join("{!s}".format(x) for x in self.line_segments) + "]"
