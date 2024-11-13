@@ -27,9 +27,16 @@ def read_input(file_path):
 
         for i in range(num_segments):
             line = [int(x) for x in file.readline().split()]
-            p1 = Point(line[0], line[1], f"P{i + 1}")
-            p2 = Point(line[2], line[3], f"Q{i + 1}")
-            segments.append(Segment(p1, p2, f"S{i + 1}"))
+            x1, y1, x2, y2 = line
+            if x1 > x2:
+                x1, y1, x2, y2 = x2, y2, x1, y1
+
+            p1 = Point(x1, y1, f"P{i + 1}")
+            p2 = Point(x2, y2, f"Q{i + 1}")
+            segment = Segment(p1, p2, f"S{i + 1}")
+            segments.append(segment)
+            p1.set_segment(segment)
+            p2.set_segment(segment)
 
         return segments, bbox
 

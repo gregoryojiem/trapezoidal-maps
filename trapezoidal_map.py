@@ -12,6 +12,7 @@ class Point:
         self.x = x
         self.y = y
         self.name = name
+        self.segment = None
 
     def is_right_of(self, point):
         """
@@ -45,6 +46,9 @@ class Point:
         # TODO testing
         cross_product = (seg.p2.x - seg.p1.x) * (self.y - seg.p1.y) - (seg.p2.y - seg.p1.y) * (self.x - seg.p1.x)
         return cross_product > 0
+
+    def set_segment(self, segment):
+        self.segment = segment
 
     def __eq__(self, other):
         if isinstance(other, Point):

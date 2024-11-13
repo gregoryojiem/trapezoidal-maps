@@ -6,13 +6,10 @@ def handle_case1_left(left_endpoint, seg, node_leaf, degenerate_point):
     """
     TODO
     """
-    trap = node_leaf.data.trap
+    if degenerate_point is not None and degenerate_point.data.point.segment.p2.is_above(seg.p2):
+        return
 
-    if degenerate_point is not None:
-        left_node = degenerate_point.data.left
-    else:
-        left_node = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, left_endpoint)))
-        left_node.trap().name = trap.name
+    trap = node_leaf.data.trap
 
     up = Node(Leaf(Trapezoid(trap.top_seg, seg, left_endpoint, seg.p2)))
     down = Node(Leaf(Trapezoid(seg, trap.bot_seg, left_endpoint, seg.p2)))
@@ -23,6 +20,13 @@ def handle_case1_left(left_endpoint, seg, node_leaf, degenerate_point):
         down.trap().right_vert = trap.right_vert
 
     s = Node(SegNode(up, down, seg))
+
+    if degenerate_point is not None:
+        left_node = Node(Leaf(degenerate_point.data.left.data.trap))
+        down.trap().bot_seg = degenerate_point.data.point.segment
+    else:
+        left_node = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, left_endpoint)))
+        left_node.trap().name = trap.name
 
     p = PointNode(left_node, s, left_endpoint)
     node_leaf.data = p
@@ -57,7 +61,7 @@ def handle_case1_right(right_endpoint, seg, node_leaf, past_traps, degenerate_po
 
     # if there's a degenerate point, we don't need to trim the right trapezoid, we just assign it to this node
     if degenerate_point is not None:
-        right_node = degenerate_point.data.right
+        right_node = Node(Leaf(degenerate_point.data.right.trap))
     else:
         right_node = Node(Leaf(Trapezoid(trap.top_seg, trap.bot_seg, right_endpoint, trap.right_vert)))
 

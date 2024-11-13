@@ -14,7 +14,7 @@ def handle_case3(seg, node_leaf, past_traps):
     side_to_trim = node_leaf.data.trap.right_vert.is_above(seg)
     right_bound = node_leaf.data.trap.right_vert
 
-    if past_traps[0].data.trap.top_seg == trap.top_seg:
+    if past_traps is not None and past_traps[0].data.trap.top_seg == trap.top_seg:
         up = past_traps[0]
         if side_to_trim:
             up.data.trap.right_vert = right_bound
