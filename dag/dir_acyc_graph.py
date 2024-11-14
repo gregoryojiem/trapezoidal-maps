@@ -48,6 +48,9 @@ class DAG:
         # If the segment only affects one trapezoid, we only have to consider case 2
         if len(affected_trapezoids) == 1:
             handle_case_2(segment, affected_trapezoids[0])
+
+            # For visualizing the DAG after each step
+            visualizations.plot_dag(self, self.bbox, False)
             return
 
         # Find the trapezoids that contain the right and left endpoints, and remove
@@ -253,3 +256,16 @@ class DAG:
             trap_name = curr_node.trap.name
             names.append(trap_name)
             return trap_name
+
+    def get_all_trapezoids(self, node):
+        """
+        Returns every leaf node in the DAG
+        :param node: The node we're currently in
+        :return: Array of all trapezoids in the DAG
+        """
+        curr_node = node.data
+
+        if isinstance(curr_node, LeafNode):
+            return {curr_node.trap}
+
+        return self.get_all_trapezoids(curr_node.left).union(self.get_all_trapezoids(curr_node.right))

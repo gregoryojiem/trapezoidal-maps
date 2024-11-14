@@ -20,6 +20,14 @@ def handle_case_1_left(left_endpoint, segment, leaf_node, degenerate_point):
     # Extract the trapezoid from the node
     trap = leaf_node.data.trap
 
+    # The left node is just the trapezoid we're in, but we trim the right wall
+    # If we have a degenerate point, then we don't need to do any trimming
+    if degenerate_point is None:
+        left_node = Node(LeafNode(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, left_endpoint)))
+    else:
+        existing_left_trapezoid = degenerate_point.data.left.data.trap
+        left_node = Node(LeafNode(existing_left_trapezoid))
+
     # Handle creating the trapezoids above and below the segment being added
     # Initially, we assume that the trapezoid's right bound is the same as the segment's
     # right endpoint (we set the right bound properly in case 3 and case 1 right)
@@ -33,15 +41,8 @@ def handle_case_1_left(left_endpoint, segment, leaf_node, degenerate_point):
     else:
         down.data.trap.right_vert = trap.right_vert
 
-    # The left node is just the trapezoid we're in, but we trim the right wall
-    # If we have a degenerate point, then we don't need to do any trimming
+    # Minor adjustment to account for degenerate case
     if degenerate_point is not None:
-        left_node = Node(LeafNode(Trapezoid(trap.top_seg, trap.bot_seg, trap.left_vert, left_endpoint)))
-        left_node.data.trap.name = trap.name
-    else:
-        existing_left_trapezoid = degenerate_point.data.left.data.trap
-        left_node = Node(LeafNode(existing_left_trapezoid))
-        # We also have to adjust the bottom segment of the trapezoid below this one
         down.data.trap.bot_seg = degenerate_point.data.point.segment
 
     # Set up the correct node structure and change the DAG

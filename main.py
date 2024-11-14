@@ -62,6 +62,17 @@ def create_csv(matrix, filename):
         f.write("\n")
 
 
+def fix_trapezoid_names(trapezoids):
+    """
+    Small function to adjust the naming of trapezoids so that they're sequential
+    i.e. T1, T2, T3 vs T1, T3, T7
+    :param trapezoids: The leaf nodes of the DAG
+    """
+    trapezoids = list(trapezoids)
+    trapezoids.sort(key=lambda x: int(x.name[1:]))
+    for i in range(len(trapezoids)):
+        trapezoids[i].name = 'T' + str(i + 1)
+
 def main():
     """
     Driver program that initializes the trapezoidal map and prints relevant information
@@ -69,6 +80,7 @@ def main():
     filename = argv[1]
     line_segments, bbox = read_input(filename)
     dag = DAG(line_segments, bbox)
+    fix_trapezoid_names(dag.get_all_trapezoids(dag.head))
 
     # Print the output matrix
     matrix = dag.create_output_matrix()
@@ -95,6 +107,7 @@ def main():
 
         point_info = list(map(int, input_list))
         break
+
     print("Traversed Nodes:")
     dag.point_region_query(dag.head, Point(point_info[0], point_info[1], "N/A"), True)
 
