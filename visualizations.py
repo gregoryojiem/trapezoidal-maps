@@ -5,6 +5,7 @@ import numpy as np
 # Globals used for debugging while traversing the DAG
 trapezoid_count = 0
 trapezoids_seen = []
+points_seen = []
 colors = plt.cm.get_cmap('hsv', 10)
 
 
@@ -18,8 +19,10 @@ def plot_dag(dag, bounding_trapezoid, reset):
     :param reset: Whether to reset trapezoids_seen or not
     """
     global trapezoids_seen
+    global points_seen
     global trapezoid_count
 
+    points_seen = []
     if reset:
         trapezoids_seen = []
         trapezoid_count = 0
@@ -43,6 +46,12 @@ def plot_point(point, ax):
     :param point: The point to plot
     :param ax: matplotlib axes
     """
+    # Avoid re-plotting degenerate points
+    global points_seen
+    if point in points_seen:
+        return
+    points_seen.append(point)
+
     hover_distance = 3
     ax.plot(point.x, point.y, color="dodgerblue", marker='o', markersize=4.5)
     ax.text(point.x, point.y + hover_distance, point.name, ha='center', va='center', color='black')
@@ -68,6 +77,7 @@ def plot_trapezoid(trapezoid, ax):
     """
     # Used for debugging
     global trapezoid_count
+
     # Used to view only new regions added (e.g. see what changed after adding a left endpoint)
     global trapezoids_seen
 
