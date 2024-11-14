@@ -73,10 +73,15 @@ def fix_trapezoid_names(trapezoids):
     for i in range(len(trapezoids)):
         trapezoids[i].name = 'T' + str(i + 1)
 
+
 def main():
     """
     Driver program that initializes the trapezoidal map and prints relevant information
     """
+    if len(argv) < 2:
+        print("Please give line segment data file")
+        return
+
     filename = argv[1]
     line_segments, bbox = read_input(filename)
     dag = DAG(line_segments, bbox)
@@ -87,7 +92,8 @@ def main():
     create_csv(matrix, filename.split(".")[0])
 
     # Visualization code
-    visualizations.plot_dag(dag, bbox, True)
+    if len(argv) == 3 and argv[2] == "visualize":
+        visualizations.plot_dag(dag, bbox, True)
 
     # Handle a planar point location query
     while True:

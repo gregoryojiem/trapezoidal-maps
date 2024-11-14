@@ -1,5 +1,5 @@
 import visualizations
-import random
+# import random
 
 from data_structures.dag_structures import Node, PointNode, SegmentNode, LeafNode
 from dag.case1 import handle_case_1_left, handle_case1_right
@@ -50,7 +50,7 @@ class DAG:
             handle_case_2(segment, affected_trapezoids[0])
 
             # For visualizing the DAG after each step
-            visualizations.plot_dag(self, self.bbox, False)
+            # visualizations.plot_dag(self, self.bbox, False)
             return
 
         # Find the trapezoids that contain the right and left endpoints, and remove
@@ -83,7 +83,7 @@ class DAG:
         handle_case1_right(segment.p2, segment, right_point_trap, up_and_down_traps, degenerate_check_right)
 
         # For visualizing the DAG after each step
-        visualizations.plot_dag(self, self.bbox, False)
+        # visualizations.plot_dag(self, self.bbox, False)
 
     def find_point(self, node, point):
         """
