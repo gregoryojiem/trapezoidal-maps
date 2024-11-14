@@ -2,12 +2,21 @@ import matplotlib.pyplot as plt
 from data_structures.dag_structures import PointNode, SegmentNode, LeafNode
 import numpy as np
 
+# Globals used for debugging while traversing the DAG
 trapezoid_count = 0
 trapezoids_seen = []
 colors = plt.cm.get_cmap('hsv', 10)
 
 
 def plot_dag(dag, bounding_trapezoid, reset):
+    """
+    Basic matplotlib function to create a visualization of a DAG
+    Can choose to display only new trapezoids, or reset trapezoids_seen
+    which will display the entire DAG
+    :param dag: A directed acyclic graph
+    :param bounding_trapezoid: The bounds for the plot
+    :param reset: Whether to reset trapezoids_seen or not
+    """
     global trapezoids_seen
     global trapezoid_count
 
@@ -29,12 +38,22 @@ def plot_dag(dag, bounding_trapezoid, reset):
 
 
 def plot_point(point, ax):
+    """
+    Plots a single point in the DAG
+    :param point: The point to plot
+    :param ax: matplotlib axes
+    """
     hover_distance = 3
     ax.plot(point.x, point.y, color="dodgerblue", marker='o', markersize=4.5)
     ax.text(point.x, point.y + hover_distance, point.name, ha='center', va='center', color='black')
 
 
 def plot_segment(segment, ax):
+    """
+    Plots a segment in the DAG
+    :param point: The segment to plot
+    :param ax: matplotlib axes
+    """
     hover_distance = 4
     midpoint_x, midpoint_y = np.mean([[segment.p1.x, segment.p1.y], [segment.p2.x, segment.p2.y]], axis=0)
     ax.plot([segment.p1.x, segment.p2.x], [segment.p1.y, segment.p2.y], color="dodgerblue")
@@ -42,26 +61,35 @@ def plot_segment(segment, ax):
 
 
 def plot_trapezoid(trapezoid, ax):
+    """
+    Plots a trapezoid in the DAG
+    :param point: The trapezoid to plot
+    :param ax: matplotlib axes
+    """
+    # Used for debugging
     global trapezoid_count
+    # Used to view only new regions added (e.g. see what changed after adding a left endpoint)
     global trapezoids_seen
 
     vertices = trapezoid.get_vertices()
     midpoint_x, midpoint_y = np.mean(vertices, axis=0)
 
-    # Used to view only new regions added (e.g. see what changed after adding a left endpoint)
     if (midpoint_x, midpoint_y) in trapezoids_seen:
         return
 
-    polygon = np.array(vertices)
-    trapezoid_count += 1
     trapezoids_seen.append((midpoint_x, midpoint_y))
+    trapezoid_count += 1
+
+    polygon = np.array(vertices)
     ax.fill(polygon[:, 0], polygon[:, 1], color=colors(trapezoid_count % 10), alpha=0.5)
     ax.text(midpoint_x, midpoint_y, trapezoid.name, ha='center', va='center', color='black')
 
 
 def plot_dag_recursive(node, ax):
     """
-    A recursive plotting function to generate a visualization of the DAG
+    Recursive function that traverses the DAG and plots each node inside of it
+    :param node: The current node we're plotting
+    :param ax: matplotlib axes
     """
     curr_node = node.data
 
