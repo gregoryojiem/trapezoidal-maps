@@ -184,6 +184,10 @@ class DAG:
                 return self.find_trapezoids(curr_node.right, segment)
 
     def create_output_matrix(self):
+        """
+        Creates an adjacency matrix which represents the DAG, where a 1 represents a connection
+        The matrix also contains the sums of the rows and columns
+        """
         node_names = []
         connections_map = {}
         self.traverse_all_nodes(self.head, connections_map, node_names)
@@ -225,10 +229,18 @@ class DAG:
         for i in range(len(matrix)):
             if i not in (0, len(matrix) - 1):
                 matrix[i][-1] = sum(matrix[i][1:])
-            print(matrix[i])
+            # print(matrix[i])
         return matrix
 
     def traverse_all_nodes(self, node, connections_map, names):
+        """
+        Recursively traverses every node in the DAG to create a list of node names and
+        a map of parents to children.
+        Initially node is the head, and connections_map and names are empty
+        :param node: Current node
+        :param connections_map: Map from node name to its children
+        :param names: List of node names, can include duplicates
+        """
         curr_node = node.data
         if isinstance(curr_node, PointNode):
             point_name = curr_node.point.name

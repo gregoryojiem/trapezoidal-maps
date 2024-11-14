@@ -108,7 +108,6 @@ def main():
         point_info = list(map(int, input_list))
         break
 
-    print("Traversed Nodes:")
     dag.point_region_query(dag.head, Point(point_info[0], point_info[1], "N/A"), True)
 
 
