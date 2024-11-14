@@ -48,12 +48,12 @@ class SegmentNode(LocationNode):
     Synonymous with the y-node discussed in lecture
     """
 
-    def __init__(self, left, right, seg):
+    def __init__(self, left, right, segment):
         super().__init__(left, right)
-        self.seg = seg
+        self.segment = segment
 
     def __str__(self):
-        return str(self.seg)
+        return str(self.segment)
 
 
 class LeafNode:

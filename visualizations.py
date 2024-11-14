@@ -69,7 +69,7 @@ def plot_dag_recursive(node, ax):
         plot_point(curr_node.point, ax)
 
     elif isinstance(curr_node, SegmentNode):
-        plot_segment(curr_node.seg, ax)
+        plot_segment(curr_node.segment, ax)
 
     elif isinstance(curr_node, LeafNode):
         plot_trapezoid(curr_node.trap, ax)
